@@ -26,7 +26,7 @@ def curWeek(request):
         raise Http404("Week does not exist")
     
     scedules = {}
-    for day in week.day_set.all():
+    for day in week.day_set.all().order_by('day_number'):
         scedule = {}
         for event in day.event_set.all():
             jevent = {}
@@ -35,7 +35,7 @@ def curWeek(request):
             jevent['title'] = event.title
             jevent['startTime'] = event.startTime
             jevent['endTime'] = event.endTime
-            scedule['id'] = jevent
+            scedule[event.id] = jevent
         scedules[day.day_number] = scedule
     return JsonResponse(scedules,safe = False)
     # return render(request, 'Calendar/week.html', {'week': week})
@@ -46,7 +46,7 @@ def week(request,week_num):
     except Week.DoesNotExist:
         raise Http404("Week does not exist")
     scedules = {}
-    for day in week.day_set.all():
+    for day in week.day_set.all().order_by('day_number'):
         scedule = {}
         for event in day.event_set.all():
             jevent = {}
@@ -55,7 +55,7 @@ def week(request,week_num):
             jevent['title'] = event.title
             jevent['startTime'] = event.startTime
             jevent['endTime'] = event.endTime
-            scedule['id'] = jevent
+            scedule[event.id] = jevent
         scedules[day.day_number] = scedule
     return JsonResponse(scedules,safe = False)
 class EventView(generic.ListView):
