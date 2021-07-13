@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Event, Day, Week
 
-
+admin.site.register(Event)
 class EventInline(admin.TabularInline):
     model = Event
     extra = 3
