@@ -56,7 +56,7 @@ def week(request,week_num):
             jevent['startTime'] = event.startTime
             jevent['endTime'] = event.endTime
             scedule[event.id] = jevent
-        scedules[day.day_number] = scedule
+        scedules[day.day_number-1] = scedule
     return JsonResponse(scedules,safe = False)
 class EventView(generic.ListView):
     template_name = 'Calendar/event.html'
