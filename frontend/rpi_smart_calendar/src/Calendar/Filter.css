@@ -1,0 +1,33 @@
+.filter {
+  /* height: 40%; */
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px;
+}
+
+.filter__title {
+  background-color: lightcyan;
+}
+
+.filter__item {
+  margin-top: 10px;
+  padding: 8px;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  background-color: lightgray;
+  font: 1rem sans-serif;
+  text-align: center;
+}
+
+.filter__item:hover {
+  cursor: pointer;
+  background-color: brown;
+  transition-duration: 0.2s;
+}
+
+.filter__item--active {
+  background-color: greenyellow;
+}

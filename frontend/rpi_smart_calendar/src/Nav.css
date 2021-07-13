@@ -1,0 +1,31 @@
+.nav {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ff0000;
+  height: 80px;
+  width: 100%;
+}
+
+.nav-item {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.nav-item2 {
+  position: absolute;
+  left: 50%;
+  font-size: 2rem;
+  transform: translate(-50%, 0);
+}
+
+.nav-item3 {
+  position: relative;
+  height: 80%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  margin-left: 75%;
+}

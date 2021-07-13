@@ -1,0 +1,30 @@
+.detail {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+  box-sizing: border-box;
+  height: 99%;
+}
+
+.detail-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: antiquewhite;
+  font: 2rem sans-serif;
+}
+
+.detail-title__text {
+  
+}
+
+.detail-title__time {
+  font: 1.2rem sans-serif;
+}
+
+.detail-content {
+  margin-top: 20px;
+  background-color: antiquewhite;
+}
