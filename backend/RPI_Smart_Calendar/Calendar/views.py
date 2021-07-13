@@ -24,6 +24,7 @@ def curWeek(request):
 
     except Week.DoesNotExist:
         raise Http404("Week does not exist")
+    
     scedules = {}
     for day in week.day_set.all():
         scedule = {}
@@ -36,14 +37,27 @@ def curWeek(request):
             jevent['endTime'] = event.endTime
             scedule['id'] = jevent
         scedules[day.day_number] = scedule
-    return JsonResponse(scedules)
+    return JsonResponse(scedules,safe = False)
     # return render(request, 'Calendar/week.html', {'week': week})
 
-class WeekView(generic.DeleteView):
-    template_name = 'Calendar/week.html'
-    model = Week
-    # def get(self, request, *args, **kwargs):
-    #     return http.HttpResponse(serializers.serialize('json', self.get_queryset()))
+def week(request,week_num):
+    try:
+        week = Week.objects.get(pk=week_num)
+    except Week.DoesNotExist:
+        raise Http404("Week does not exist")
+    scedules = {}
+    for day in week.day_set.all():
+        scedule = {}
+        for event in day.event_set.all():
+            jevent = {}
+            jevent['eventType'] = event.type
+            jevent['id'] = event.id
+            jevent['title'] = event.title
+            jevent['startTime'] = event.startTime
+            jevent['endTime'] = event.endTime
+            scedule['id'] = jevent
+        scedules[day.day_number] = scedule
+    return JsonResponse(scedules,safe = False)
 class EventView(generic.ListView):
     template_name = 'Calendar/event.html'
     def get_queryset(self):

@@ -34,7 +34,7 @@ class Event(models.Model):
     day = models.ForeignKey(Day, on_delete=models.CASCADE,default='')
     title = models.CharField(max_length=50)
     addTime = models.DateTimeField(auto_now_add=True)
-    stratTime = models.DateTimeField('start Time')
+    startTime = models.DateTimeField('start Time')
     endTime = models.DateTimeField('end Time',default=django.utils.timezone.now)
     method = models.CharField(max_length=4,choices=methods.choices)
     type = models.CharField(max_length=6,choices=types.choices)
