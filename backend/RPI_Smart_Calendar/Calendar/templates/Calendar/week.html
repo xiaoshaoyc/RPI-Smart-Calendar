@@ -1,0 +1,6 @@
+{% for day in week.day_set.all %}
+    <h1> {{ day.get_day_number_display }} </h1>
+    {% for event in day.event_set.all %}
+        <p> {{event.title}} </p>
+    {% endfor %}
+{% endfor %}
