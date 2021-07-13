@@ -12,13 +12,13 @@ class Week(models.Model):
 
 class Day(models.Model):
     class days(models.IntegerChoices):
-        Sunday = 1, _('SUN')
-        Monday = 2, _('MON')
-        Tuesday = 3, _('TUE')
-        Wednesday = 4, _('WED')
-        Thursday = 5, _('THU')
-        Friday = 6, _('FRI')
-        Saturday = 7, _('SAT')
+        Sunday = 0, _('SUN')
+        Monday = 1, _('MON')
+        Tuesday = 2, _('TUE')
+        Wednesday = 3, _('WED')
+        Thursday = 4, _('THU')
+        Friday = 5, _('FRI')
+        Saturday = 6, _('SAT')
     week = models.ForeignKey(Week, on_delete=models.CASCADE)
     day_number = models.IntegerField(choices=days.choices)
     def __str__(self):
