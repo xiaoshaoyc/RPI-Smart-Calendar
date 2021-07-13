@@ -25,9 +25,9 @@ def curWeek(request):
     except Week.DoesNotExist:
         raise Http404("Week does not exist")
     
-    scedules = {}
+    schedules = {}
     for day in week.day_set.all().order_by('day_number'):
-        scedule = {}
+        schedule = {}
         for event in day.event_set.all():
             jevent = {}
             jevent['eventType'] = event.type
@@ -35,9 +35,9 @@ def curWeek(request):
             jevent['title'] = event.title
             jevent['startTime'] = event.startTime
             jevent['endTime'] = event.endTime
-            scedule[event.id] = jevent
-        scedules[day.day_number] = scedule
-    return JsonResponse(scedules,safe = False)
+            schedule[event.id] = jevent
+        schedules[day.day_number] = schedule
+    return JsonResponse(schedules,safe = False)
     # return render(request, 'Calendar/week.html', {'week': week})
 
 def week(request,week_num):
@@ -45,9 +45,9 @@ def week(request,week_num):
         week = Week.objects.get(pk=week_num)
     except Week.DoesNotExist:
         raise Http404("Week does not exist")
-    scedules = {}
+    schedules = {}
     for day in week.day_set.all().order_by('day_number'):
-        scedule = {}
+        schedule = {}
         for event in day.event_set.all():
             jevent = {}
             jevent['eventType'] = event.type
@@ -55,9 +55,9 @@ def week(request,week_num):
             jevent['title'] = event.title
             jevent['startTime'] = event.startTime
             jevent['endTime'] = event.endTime
-            scedule[event.id] = jevent
-        scedules[day.day_number-1] = scedule
-    return JsonResponse(scedules,safe = False)
+            schedule[event.id] = jevent
+        schedules[day.day_number-1] = schedule
+    return JsonResponse(schedules,safe = False)
 class EventView(generic.ListView):
     template_name = 'Calendar/event.html'
     def get_queryset(self):
