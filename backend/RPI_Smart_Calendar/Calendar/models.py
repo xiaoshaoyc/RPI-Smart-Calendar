@@ -7,6 +7,7 @@ import django
 from django.contrib import admin
 # Create your models here.
 
+
 class Year(models.Model):
     year_number = models.IntegerField(default = timezone.now().year)
     @admin.display(
@@ -15,6 +16,7 @@ class Year(models.Model):
     )
     def __str__(self):
         return 'year'+str(self.year_number)
+
 
 class Week(models.Model):
     year = models.ForeignKey(Year, on_delete=models.CASCADE)

@@ -28,6 +28,7 @@ def curWeek(request):
     except:
         raise Http404("Week does not exist")
     
+
     schedules = []
     for day in week.day_set.all().order_by('day_number'):
         schedule = []
@@ -79,5 +80,6 @@ def event(request, id):
     jevent['title'] = event.title
     jevent['label'] = [event.group]
     return JsonResponse(jevent,safe = False)
+
 
 

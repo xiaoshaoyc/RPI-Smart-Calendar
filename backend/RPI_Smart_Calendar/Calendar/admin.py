@@ -8,6 +8,12 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event,EventAdmin)
 
 
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+admin.site.register(Event,EventAdmin)
+
+
 class EventInline(admin.TabularInline):
     model = Event
     extra = 3
@@ -15,6 +21,7 @@ class EventInline(admin.TabularInline):
 class DayAdmin(admin.ModelAdmin):
     inlines = [EventInline]
     list_display = ('day_number', 'get_day_number_display','week')
+
     search_fields = ['day_number']
 admin.site.register(Day, DayAdmin)
 

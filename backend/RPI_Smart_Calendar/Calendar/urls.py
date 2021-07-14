@@ -8,4 +8,5 @@ urlpatterns = [
     path('week/', views.curWeek, name='CurWeek'),
     path('week/<int:year_num>/<int:week_num>',views.week, name='week'),
     path('event/<int:id>', views.event, name='event'),
+
 ]
