@@ -46,7 +46,7 @@ class Detail extends React.Component {
     let method = "manual"; // TODO: maybe need better variable name
     let eventType = "event";
     let estTime = 80;  // unit is minute for now
-    if (this.props.eventId === 15) {
+    if (this.props.eventId === 999) {
       title = "CSCI 4210";
       method = "sync";
       estTime = 10;
