@@ -25,13 +25,24 @@ SECRET_KEY = 'django-insecure-l0#02ccg8^^t2hd(o-q588u=7=853f5xv5*j6f($=c7p^6j^rw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver',
+    '127.0.0.1'
+]
 
+ADMIN_LOGIN = 'admin'
+ADMIN_PASSWORD = '123456'
+ADMIN_COURSE = [
+    'course1',
+    'course2',
+    'course3',
+    'course4'
+]
 
 # Application definition
 
 INSTALLED_APPS = [
     'Calendar.apps.CalendarConfig',
+    'User.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
