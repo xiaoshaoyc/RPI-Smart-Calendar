@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, Day, Week
+from .models import Event, Day, Week, Year
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -14,7 +14,7 @@ class EventInline(admin.TabularInline):
 
 class DayAdmin(admin.ModelAdmin):
     inlines = [EventInline]
-    list_display = ('day_number', 'get_day_number_display')
+    list_display = ('day_number', 'get_day_number_display','week')
     search_fields = ['day_number']
 admin.site.register(Day, DayAdmin)
 
@@ -29,3 +29,15 @@ class WeekAdmin(admin.ModelAdmin):
     search_fields = ['week_number']
 
 admin.site.register(Week, WeekAdmin)
+
+class WeekInline(admin.TabularInline):
+    model = Week
+    extra = 3
+
+class YearAdmin(admin.ModelAdmin):
+    inlines = [WeekInline]
+    list_display = ('pk', 'year_number')
+    search_fields = ['year_number']
+
+admin.site.register(Year, YearAdmin)
+# admin.site.register(Year)
