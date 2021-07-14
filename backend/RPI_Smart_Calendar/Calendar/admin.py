@@ -7,13 +7,6 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
 admin.site.register(Event,EventAdmin)
 
-
-
-class EventAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title')
-admin.site.register(Event,EventAdmin)
-
-
 class EventInline(admin.TabularInline):
     model = Event
     extra = 3
