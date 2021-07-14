@@ -9,11 +9,12 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   }
 
-  location = / {
+  location ~ ^(/|/index.html)$ {
+    root /usr/share/nginx/html;
     index index.html;
   }
 
-  location ~ ^/(css|js)/ {
+  location ~ ^/static/ {
     root /usr/share/nginx/html;
   }
 }
