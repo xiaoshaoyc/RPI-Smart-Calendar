@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import views
 
-app_name = 'Calendar'
+app_name = 'User'
 
 urlpatterns = [
     path('login/auth', views.authenticate, name='authenticate'),
