@@ -6,17 +6,26 @@ from django.http.response import Http404, JsonResponse
 from django.conf import settings
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import check_password
-from django.contrib.auth.models import User
+from .models import User
 
 def register(request):
-    user = [["Zeyu","Wang","wangz45","wangz45"],
-                ["Harry","Sui","harry123","123456"]]
-    courses = [[],
-                []]
-    user = User(username=settings.ADMIN_LOGIN)
-    user.is_staff = True
-    user.is_superuser = True
-    user.save()
+    return
+#     user = [["Zeyu","Wang","wangz45","wangz45"],
+#                 ["Harry","Sui","harry123","123456"]]
+#     courses1 = [["wangz45","MATH 4090","Foundation of Analysis"],
+#                 ["wangz45","MATH 4800","Numerical Computing"],
+#                 ["wangz45","MATH 4210","Operating System"],
+#                 ["wangz45","MATH 4440","Software Design and Documentation"]
+#                 ]
+#     courses2 = [["harry123","MATH 4090","Foundation of Analysis"],
+#                 ["harry123","MATH 4800","Numerical Computing"],
+#                 ["harry123","MATH 4500","Computer Design"],
+#                 ["harry123","MATH 4440","Software Design and Documentation"]
+#                 ]
+#     user = User(username=settings.ADMIN_LOGIN)
+#     user.is_staff = True
+#     user.is_superuser = True
+#     user.save()
 
 def authenticate(request):
     username = request.POST["username"]

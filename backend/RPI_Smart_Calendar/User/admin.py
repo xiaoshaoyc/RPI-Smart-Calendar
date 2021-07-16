@@ -1,17 +1,17 @@
 from django.contrib import admin
 
-from .models import Course, User
+from Calendar.models import Event
+from .models import User, Course
 
-'''
-class UserAdmin(admin.ModelAdmin):
-    fields = ['rcs_id', 'first_name','last_name']
-'''
 
-class CourseAdmin(admin.ModelAdmin):
-    fields = ['course_id','course_name']
-
+class EventInline(admin.TabularInline):
+    model = Event
+    extra = 3
 class CourseInline(admin.TabularInline):
     model = Course
-    extra = 8
-#admin.site.register(User, UserAdmin)
-admin.site.register(Course)
+    extra = 3
+class UserAdmin(admin.ModelAdmin):
+    inlines = [EventInline,CourseInline]
+    list_display = ('username', 'first_name')
+
+admin.site.register(User, UserAdmin)

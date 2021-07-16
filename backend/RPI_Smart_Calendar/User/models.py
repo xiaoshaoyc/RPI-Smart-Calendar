@@ -1,7 +1,8 @@
 
 import django
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 # class Group(models.Model):
 #     group_id = models.CharField(max_length=30)
 #     num_users = models.IntegerField()
@@ -35,10 +36,11 @@ class User(models.Model):
     #     'Group'
     # )
 '''
-
+class User(AbstractUser):
+    pass
 class Course(models.Model):
     course_id = models.CharField(max_length=30)
     course_name = models.CharField(max_length=120)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     def __str__(self):
         return self.course_id
