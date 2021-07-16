@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from Calendar.models import Event
-from .models import User, Course
-
+from .models import User
+from Group.models import Course
 
 class EventInline(admin.TabularInline):
     model = Event

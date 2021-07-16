@@ -13,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect, request
 from django.views import generic
 from django.utils import timezone
 from datetime import date
+from User.models import User
 
 class IndexView(generic.ListView):
     template_name = 'Calendar/index.html'
@@ -25,8 +26,14 @@ def curWeek(request):
     return week(request,year_number,week_number)
 
 def week(request,year_num,week_num):
+    user_id = request.session.get('user_id', None)
+    if user_id:
+        user = User.objects.get(id=user_id)
+    else:
+        return HttpResponseRedirect(reverse('User:authenticate'))
+    events = user.event_set.all()
     try:
-        events_year = Event.objects.filter(startTime__year = year_num)
+        events_year = events.filter(startTime__year = year_num)
         events_week = events_year.filter(startTime__week = week_num)
     except:
         raise Http404("Week does not exist")
@@ -46,8 +53,14 @@ def week(request,year_num,week_num):
     return JsonResponse(schedules,safe = False)
 
 def event(request, id):
+    user_id = request.session.get('user_id', None)
+    if user_id:
+        user = User.objects.get(id=user_id)
+    else:
+        raise Http404("User Not Login")
+    events = user.event_set.all()
     try:
-        event = Event.objects.get(id = id)
+        event = events.get(id = id)
     except:
         raise Http404("Event does not exist")
     jevent = {}
