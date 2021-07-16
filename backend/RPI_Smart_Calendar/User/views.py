@@ -9,6 +9,10 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 
 def register(request):
+    user = [["Zeyu","Wang","wangz45","wangz45"],
+                ["Harry","Sui","harry123","123456"]]
+    courses = [[],
+                []]
     user = User(username=settings.ADMIN_LOGIN)
     user.is_staff = True
     user.is_superuser = True
