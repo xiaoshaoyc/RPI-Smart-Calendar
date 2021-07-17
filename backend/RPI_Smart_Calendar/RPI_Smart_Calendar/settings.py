@@ -29,18 +29,11 @@ ALLOWED_HOSTS = ['testserver',
     '127.0.0.1'
 ]
 
-ADMIN_LOGIN = 'admin'
-ADMIN_PASSWORD = '123456'
-ADMIN_COURSE = [
-    'course1',
-    'course2',
-    'course3',
-    'course4'
-]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'Group.apps.GroupConfig',
     'Calendar.apps.CalendarConfig',
     'User.apps.UserConfig',
     'django.contrib.admin',
@@ -135,3 +128,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'User.User'

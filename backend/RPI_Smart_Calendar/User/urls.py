@@ -2,10 +2,9 @@ from django.urls import path
 
 from . import views
 
-app_name = 'Calendar'
+app_name = 'User'
 
 urlpatterns = [
-    path('login/auth', views.authenticate, name='authenticate'),
-    path('group/',views.get_course, name = "Courses"),
-    path('register/',views.register, name = "Register")
+    path('', views.logout, name='authenticate'),
+    path('auth/', views.authenticate, name='authenticate'),
 ]
