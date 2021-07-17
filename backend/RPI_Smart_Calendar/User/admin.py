@@ -12,6 +12,6 @@ class CourseInline(admin.TabularInline):
     extra = 3
 class UserAdmin(admin.ModelAdmin):
     inlines = [EventInline,CourseInline]
-    list_display = ('username', 'first_name')
+    list_display = ('username', 'first_name','last_name')
 
 admin.site.register(User, UserAdmin)
