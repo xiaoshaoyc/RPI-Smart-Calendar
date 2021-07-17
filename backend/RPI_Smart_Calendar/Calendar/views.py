@@ -28,7 +28,7 @@ def week(request, year_num, week_num):
     else:
         output["isSuccess"] = False
         output["Messgae"] = 'FAIL: PLEASE LOGIN'
-        return JsonResponse(schedules, safe=False)
+        return JsonResponse(output, safe=False)
     # get week
     events = user.event_set.all()
     try:
@@ -37,7 +37,7 @@ def week(request, year_num, week_num):
     except:
         output["isSuccess"] = False
         output["Messgae"] = 'FAIL: WEEK NOT EXIST'
-        return JsonResponse(schedules, safe=False)
+        return JsonResponse(output, safe=False)
     # get event
     for day in range(1, 8):
         schedule = []
