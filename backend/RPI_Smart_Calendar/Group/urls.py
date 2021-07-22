@@ -5,5 +5,5 @@ from . import views
 app_name = 'Group'
 
 urlpatterns = [
-    path('',views.get_course, name = "Courses"),
+    path('',views.CourseView.as_view(), name = "Courses"),
 ]
