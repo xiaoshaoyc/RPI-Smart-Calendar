@@ -24,9 +24,12 @@ SECRET_KEY = 'django-insecure-l0#02ccg8^^t2hd(o-q588u=7=853f5xv5*j6f($=c7p^6j^rw
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PRODUCTION = False 
+if os.getenv('PRODUCTION', "False").lower() in ["true", "1", "y", "yes"]:
+    PRODUCTION = True
 
-ALLOWED_HOSTS = ['testserver',
-    '127.0.0.1'
+ALLOWED_HOSTS = [
+    '*' if PRODUCTION else '127.0.0.1',
 ]
 
 
@@ -76,14 +79,27 @@ WSGI_APPLICATION = 'RPI_Smart_Calendar.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databasess
+if PRODUCTION:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'django_db',
+            'USER': 'django',
+            'PASSWORD': '12345678',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    } 
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+
+
 
 
 # Password validation

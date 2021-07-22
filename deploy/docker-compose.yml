@@ -6,8 +6,8 @@ services:
       - ../frontend/rpi_smart_calendar/build:/usr/share/nginx/html:ro
       - ./nginx/templates:/etc/nginx/templates
     ports:
-      - "80:80"
-      - "443:443"
+      - "20000:80"
+      # - "443:443"
     restart: always
     depends_on:
       - app
@@ -18,6 +18,11 @@ services:
       dockerfile: deploy/python/Dockerfile
     expose:
       - "20001"
+    environment:
+      - PRODUCTION=true
+      - SUPERUSER_NAME=TimeMaster
+      - SUPERUSER_EMAIL=Not@implement.yet
+      - SUPERUSER_PASSWD=12345678
     restart: always
     depends_on:
       - db
@@ -34,5 +39,6 @@ services:
     environment:
       - POSTGRES_USER=django
       - POSTGRES_PASSWORD=12345678
-      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_DB=django_db
+      - PGDATA=/var/lib/postgresql/data/pgdata
 
