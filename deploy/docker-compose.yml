@@ -19,7 +19,7 @@ services:
     expose:
       - "20001"
     environment:
-      - PRODUCTION
+      - PRODUCTION=true
       - SUPERUSER_NAME=TimeMaster
       - SUPERUSER_EMAIL=Not@implement.yet
       - SUPERUSER_PASSWD=12345678
