@@ -1,7 +1,6 @@
 from django.http.response import JsonResponse
 from django.views import generic
 from datetime import date
-
 from django.views import View
 from User.models import User
 
