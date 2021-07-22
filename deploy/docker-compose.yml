@@ -6,8 +6,8 @@ services:
       - ../frontend/rpi_smart_calendar/build:/usr/share/nginx/html:ro
       - ./nginx/templates:/etc/nginx/templates
     ports:
-      - "80:80"
-      - "443:443"
+      - "20000:80"
+      # - "443:443"
     restart: always
     depends_on:
       - app
@@ -20,6 +20,9 @@ services:
       - "20001"
     environment:
       - PRODUCTION
+      - SUPERUSER_NAME=TimeMaster
+      - SUPERUSER_EMAIL=Not@implement.yet
+      - SUPERUSER_PASSWD=12345678
     restart: always
     depends_on:
       - db
@@ -27,7 +30,7 @@ services:
   db:
     image: postgres:13.3
     volumes:
-      - ./postgres/data:/var/lib/postgresql/data/pgdata
+      - ./postgres/data:/var/lib/postgresql/data
     ports:
       - "20002:5432"
     expose:
