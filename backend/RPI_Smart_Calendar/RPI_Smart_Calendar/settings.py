@@ -36,15 +36,15 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'Group.apps.GroupConfig',
-    'Calendar.apps.CalendarConfig',
-    'User.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Group.apps.GroupConfig',
+    'Calendar.apps.CalendarConfig',
+    'User.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
