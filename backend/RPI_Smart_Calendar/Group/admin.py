@@ -1,7 +1,15 @@
 from django.contrib import admin
 
-from .models import Course
+from .models import MyGroup, Course, Message
 
-class CourseAdmin(admin.ModelAdmin):
-    list_display = ('course_id', 'course_name','user')
-admin.site.register(Course,CourseAdmin)
+class MessageInline(admin.TabularInline):
+    model = Message
+    extra = 0
+class CourseInline(admin.TabularInline):
+    model = Course
+    extra = 0
+class GroupAdmin(admin.ModelAdmin):
+    inlines = [MessageInline,CourseInline]
+    list_display = ('group_id', 'name')
+
+admin.site.register(MyGroup, GroupAdmin)

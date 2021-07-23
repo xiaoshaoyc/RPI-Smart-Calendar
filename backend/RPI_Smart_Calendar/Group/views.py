@@ -19,7 +19,7 @@ class CourseView(View):
         # get course
         courses = user.course_set.all()
         for course in courses:
-            data.append(course.course_id)
+            data.append(course.group.group_id)
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS'
         return JsonResponse(output, safe=False)
