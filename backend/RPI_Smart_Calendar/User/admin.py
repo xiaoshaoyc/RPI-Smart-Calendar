@@ -6,10 +6,10 @@ from Group.models import Course
 
 class EventInline(admin.TabularInline):
     model = Event
-    extra = 3
+    extra = 0
 class CourseInline(admin.TabularInline):
     model = Course
-    extra = 3
+    extra = 0
 class UserAdmin(admin.ModelAdmin):
     inlines = [EventInline,CourseInline]
     list_display = ('username', 'first_name','last_name')
