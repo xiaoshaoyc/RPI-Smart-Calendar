@@ -34,3 +34,4 @@ class AuthenticateView(View):
             output["message"] = "ERROR: LOGIN FAILURE, USER DOES NOT EXSIST"
             output["auth"] = False
         return JsonResponse(output, safe=False)
+

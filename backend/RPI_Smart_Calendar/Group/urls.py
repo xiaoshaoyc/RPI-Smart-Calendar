@@ -6,4 +6,5 @@ app_name = 'Group'
 
 urlpatterns = [
     path('',views.CourseView.as_view(), name = "Courses"),
+
 ]
