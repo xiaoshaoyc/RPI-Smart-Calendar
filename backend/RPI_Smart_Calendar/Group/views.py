@@ -3,7 +3,7 @@ from django.views import View
 from User.models import User
 # Create your views here.
 
-class CourseView(View):
+class DisplayCourses(View):
     def get(self,request):
         output = {}
         data = []
@@ -23,3 +23,12 @@ class CourseView(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
+class ReceiveMessage(View):
+    def get(self,request):
+        pass
+class MessageView(View):
+    def get(self,request):
+        pass
+class DisplayUsers(View):
+    def get(self,request):
+        pass
