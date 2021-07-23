@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import check_password
 from django.views import View
 from .models import User
 
-class LogoutView(View):
+class Logout(View):
     def get(self, request):
         try:
             del request.session['user_id']
@@ -13,7 +13,7 @@ class LogoutView(View):
         output = 'logout'
         return JsonResponse(output, safe=False)
 
-class AuthenticateView(View):
+class Authenticate(View):
     def get(self, request):
         # username = request.POST["username"]
         # password = request.POST["password"]
