@@ -80,7 +80,7 @@ class EventView(View):
         jevent['details'] = event.details
         jevent['method'] = event.method
         jevent['title'] = event.title
-        jevent['label'] = [event.group]
+        jevent['label'] = [event.group.group_id]
         jevent["isSuccess"] = True
         jevent["Messgae"] = 'SUCCESS'
         return JsonResponse(jevent, safe=False)
