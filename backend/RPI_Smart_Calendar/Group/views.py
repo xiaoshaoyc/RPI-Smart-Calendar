@@ -15,11 +15,11 @@ class CourseView(View):
         else:
             output["isSuccess"] = False
             output["Messgae"] = 'FAIL: PLEASE LOGIN'
-            return JsonResponse(output, safe=False)
+            return JsonResponse(status=401, data = output, safe=False)
         # get course
         courses = user.course_set.all()
         for course in courses:
             data.append(course.group.group_id)
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS'
-        return JsonResponse(output, safe=False)
+        return JsonResponse(status=200, data = output, safe=False)

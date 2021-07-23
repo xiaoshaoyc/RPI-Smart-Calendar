@@ -27,11 +27,13 @@ class AuthenticateView(View):
                 output["message"] = "LOGIN SUCCESS"
                 output["auth"] = True
                 request.session['user_id'] = user.id
+                return JsonResponse(status=200, data = output, safe=False)
             else:
                 output["message"] = "ERROR: LOGIN FAILURE, WRONG PASSWORD"
                 output["auth"] = False
+                return JsonResponse(status=500, data = output, safe=False)
         except User.DoesNotExist:
             output["message"] = "ERROR: LOGIN FAILURE, USER DOES NOT EXSIST"
             output["auth"] = False
-        return JsonResponse(output, safe=False)
+        return JsonResponse(status=500, data = output, safe=False)
 

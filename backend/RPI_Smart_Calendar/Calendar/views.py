@@ -28,7 +28,7 @@ class WeekView(View):
         else:
             output["isSuccess"] = False
             output["Messgae"] = 'FAIL: PLEASE LOGIN'
-            return JsonResponse(output, safe=False)
+            return JsonResponse(status=401, data = output, safe=False)
         # get week
         events = user.event_set.all()
         try:
@@ -37,7 +37,7 @@ class WeekView(View):
         except:
             output["isSuccess"] = False
             output["Messgae"] = 'FAIL: WEEK NOT EXIST'
-            return JsonResponse(output, safe=False)
+            return JsonResponse(status=500, data = output, safe=False)
         # get event
         for day in range(1, 8):
             schedule = []
@@ -53,7 +53,7 @@ class WeekView(View):
             schedules.append(schedule)
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS'
-        return JsonResponse(output, safe=False)
+        return JsonResponse(status=200, data = output, safe=False)
 
 class EventView(View):
     def get(self,request, id):
@@ -65,7 +65,7 @@ class EventView(View):
         else:
             jevent["isSuccess"] = False
             jevent["Messgae"] = 'FAIL: PLEASE LOGIN'
-            return JsonResponse(jevent, safe=False)
+            return JsonResponse(status=401, data = jevent, safe=False)
         # get event
         events = user.event_set.all()
         try:
@@ -73,7 +73,7 @@ class EventView(View):
         except:
             jevent["isSuccess"] = False
             jevent["Messgae"] = 'FAIL: EVENT NOT EXIST'
-            return JsonResponse(jevent, safe=False)
+            return JsonResponse(status=500, data = jevent, safe=False)
         jevent['id'] = event.id
         jevent['eventType'] = event.type
         jevent['estTime'] = event.estTime
@@ -83,4 +83,4 @@ class EventView(View):
         jevent['label'] = [event.group.group_id]
         jevent["isSuccess"] = True
         jevent["Messgae"] = 'SUCCESS'
-        return JsonResponse(jevent, safe=False)
+        return JsonResponse(status=200, data = jevent, safe=False)
