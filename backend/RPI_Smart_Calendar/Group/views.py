@@ -26,7 +26,7 @@ class DisplayCourses(View):
 class ReceiveMessage(View):
     def get(self,request):
         pass
-class MessageView(View):
+class DisplayMessages(View):
     def get(self,request):
         pass
 class DisplayUsers(View):
