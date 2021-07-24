@@ -5,12 +5,6 @@ from django.views import View
 from User.models import User
 
 
-class IndexView(generic.ListView):
-    template_name = 'Calendar/index.html'
-
-    def get_queryset(self):
-        return
-
 class CurWeekView(View):
     def get(self,request):
         year_num = date.today().isocalendar()[0]
@@ -84,3 +78,31 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Messgae"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
+
+class CurAnalysisView(View):
+    def get(self,request):
+        pass
+
+class AnalysisView(View):
+    def get(self,request):
+        pass
+
+class AddEvent(View):
+    def get(self,request):
+        pass
+
+class EditEvent(View):
+    def get(self,request):
+        pass
+
+class DeleteEvent(View):
+    def get(self,request):
+        pass
+
+class DueView(View):
+    def get(self,request):
+        pass
+
+class UpdateDue(View):
+    def get(self,request):
+        pass
