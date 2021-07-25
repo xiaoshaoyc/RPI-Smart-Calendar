@@ -73,6 +73,7 @@ class EventView(View):
         except:
             jevent["isSuccess"] = False
             jevent["Messgae"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
+
             return JsonResponse(status=500, data = jevent, safe=False)
         jevent['id'] = event.id
         jevent['eventType'] = event.type
@@ -288,3 +289,4 @@ class UpdateDue(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCESS: EVENT SAVED'
         return JsonResponse(status=200, data = output, safe=False)
+
