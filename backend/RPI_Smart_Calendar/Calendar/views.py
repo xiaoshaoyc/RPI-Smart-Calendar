@@ -73,6 +73,7 @@ class EventView(View):
         except:
             jevent["isSuccess"] = False
             jevent["Messgae"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
+
             return JsonResponse(status=500, data = jevent, safe=False)
         jevent['id'] = event.id
         jevent['eventType'] = event.type
@@ -88,6 +89,7 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Messgae"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
+
 
 class CurAnalysisView(View):
     def get(self,request):
@@ -175,3 +177,4 @@ class UpdateDue(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCESS: EVENT SAVED'
         return JsonResponse(status=200, data = output, safe=False)
+

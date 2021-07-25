@@ -5,6 +5,7 @@ from .models import Message, MyGroup
 # Create your views here.
 
 #return courses of of the user
+
 class DisplayCourses(View):
     def get(self,request):
         output = {}
@@ -107,3 +108,4 @@ class DisplayUsers(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS: USERS RETURNED'
         return JsonResponse(status=200, data = output, safe=False)
+

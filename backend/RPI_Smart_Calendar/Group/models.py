@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 class MyGroup(Group):
     group_id = models.CharField(max_length=30, null=True,  unique=True)
 
+
 class Message(models.Model):
     group = models.ForeignKey(settings.AUTH_GROUP_MODEL, on_delete=models.CASCADE, default='')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
