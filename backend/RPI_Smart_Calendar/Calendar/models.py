@@ -20,16 +20,16 @@ class Event(models.Model):
         line = 'line'
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE, default='')
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, blank=True, null=True)
     addTime = models.DateTimeField(auto_now_add=True)
     startTime = models.DateTimeField(
         'start Time', default=django.utils.timezone.now, blank=True, null=True)
     endTime = models.DateTimeField('end Time',  default=django.utils.timezone.now)
-    method = models.CharField(max_length=4, choices=methods.choices)
+    method = models.CharField(max_length=4, choices=methods.choices, default='sync')
     type = models.CharField(max_length=6, choices=types.choices)
-    details = models.CharField(max_length=200)
+    details = models.CharField(max_length=200, blank=True, null=True)
     actualTime = models.IntegerField(null=True,blank=True)
-    group = models.ForeignKey(MyGroup, on_delete=models.CASCADE, default='', blank=True, null=True)
+    group = models.ForeignKey(MyGroup, on_delete=models.CASCADE, blank=True, null=True)
     #calculate estTime
     def calculate_estTime(self):
         #get all dues with actualTime
@@ -63,6 +63,7 @@ class Event(models.Model):
         myx.append(endTime)
         myx.append(groupid)
         return clf.predict([myx])[0]
+    #get estTime
     def estTime(self):
         #if event
         if self.type=='block':
@@ -73,7 +74,19 @@ class Event(models.Model):
                 return self.actualTime
             else:
                 return self.calculate_estTime()
-
+    
+    #get title
+    def get_title(self):
+        if self.type=='block':
+            return self.title
+        else:
+            return self.group.group_id+ ' DUE'
+    #get detail
+    def get_details(self):
+        if self.type=='block':
+            return self.details
+        else:
+            return self.group.name+ ' DUE'
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(weeks=2) <= self.endTime <= now
