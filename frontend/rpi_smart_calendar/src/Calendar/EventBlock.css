@@ -1,0 +1,15 @@
+.event-item {
+  position: absolute;
+  opacity: 0.8;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.event-item__block {
+  background-color: aqua;
+}
+
+
+.event-item__line {
+  background-color: orange;
+}
