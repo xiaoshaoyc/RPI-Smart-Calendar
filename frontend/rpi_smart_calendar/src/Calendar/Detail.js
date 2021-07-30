@@ -69,6 +69,9 @@ class Detail extends React.Component {
           <div>Type: {eventType}</div>
           <div>Est. Time: {formatMinute(estTime)}</div>
         </div>
+        <div className="deatil-actions">
+          <button>Delete</button>
+        </div>
       </div>
     );
   }

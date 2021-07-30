@@ -25,69 +25,17 @@
   height: 100%
 }
 
-.cal-grid {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 1500px;
+.addEvent {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
 }
 
-.cal-grid__col {
-  flex-basis: 14.28%;
-  border-left: 3px solid black;
-}
-
-.cal-grid__row {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  border-top: 2px solid #334b52;
-
-}
-
-.cal-grid__head {
-  display: flex;
-  justify-content: space-around;
-}
-
-.event-item {
-  position: absolute;
-  opacity: 0.8;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.event-item__block {
-  background-color: aqua;
-}
-
-
-.event-item__line {
-  background-color: orange;
-}
-
-.cal-grid-elem {
-  display: flex;
-  flex-direction: row;
-
-}
-
-.cal-timebar {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  width: 50px;
-  height: 1500px;
-}
-
-.cal-timebar__time {
-  position: absolute;
-}
-
-.cal-timebar__time-inner {
-  position: relative;
-  top: -10.5px;
-  right: -20px;
-  /* margin-left: 100%; */
+.eventForm {
+  position: fixed;
+  width: 500px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
+  background-color: aliceblue;
 }
