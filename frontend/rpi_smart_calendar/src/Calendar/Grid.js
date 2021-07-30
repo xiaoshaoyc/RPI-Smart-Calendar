@@ -12,14 +12,18 @@ class Grid extends React.Component {
     this.getEventList();
   }
   getEventList() {
+    // TODO: delete
+    let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    xhr2.send();
+
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://127.0.0.1:8000/calendar/week");
+    xhr.open("GET", "http://127.0.0.1:8000/calendar/week/");
+    xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
     // TODO: delete
-    xhr.setRequestHeader("Origin", "http://127.0.0.1:8000");
-    xhr.setRequestHeader("Referer", "http://127.0.0.1:8000");
-    xhr.withCredentials = true;
+    // xhr.withCredentials = true;
 
     xhr.send();
     
@@ -37,8 +41,15 @@ class Grid extends React.Component {
         console.error(`Event block request: can't understand return value`);
         return;
       }
+      
+      if (resJson.isSuccess == false) {
+        alert("need login");
+        return;
+      }
+
+      let data = resJson.data;
       let eventList = [];
-      for (let dayEventList of resJson) {
+      for (let dayEventList of data) {
         for (let event of dayEventList) {
           eventList.push(event);
         }
