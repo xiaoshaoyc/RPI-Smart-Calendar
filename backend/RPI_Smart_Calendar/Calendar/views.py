@@ -75,6 +75,8 @@ class EventView(View):
             jevent["Messgae"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
 
             return JsonResponse(status=500, data = jevent, safe=False)
+        jevent['startTime'] = event.startTime
+        jevent['endTime'] = event.endTime
         jevent['id'] = event.id
         jevent['eventType'] = event.type
         jevent['estTime'] = event.estTime()
