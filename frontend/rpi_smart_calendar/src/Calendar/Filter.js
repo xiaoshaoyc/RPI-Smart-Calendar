@@ -20,7 +20,7 @@ class Filter extends React.Component {
     }
     return (
       <div className="filter">
-        <div className="filter__title"><b>Study Group</b></div>
+        <div className="filter__title"><b>Fliter</b></div>
         {htmlChunks}
       </div>
     );

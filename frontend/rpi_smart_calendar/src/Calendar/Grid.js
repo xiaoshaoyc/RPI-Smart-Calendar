@@ -1,12 +1,14 @@
 import React from 'react';
 import EventBlock from './EventBlock';
 import './Grid.css';
+import {getWeek} from '../Util'
 
 class Grid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      eventList: props.eventList,
+      curDate: props.curDate,
+      eventList: [],
     }
 
     this.getEventList();
@@ -15,10 +17,13 @@ class Grid extends React.Component {
     // TODO: delete
     let xhr2 = new XMLHttpRequest();
     xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    xhr2.withCredentials = true;
     xhr2.send();
 
+    let curDate = this.props.curDate;
+    console.log(`CurWeek: ${getWeek(curDate)}`);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://127.0.0.1:8000/calendar/week/");
+    xhr.open("GET", `http://127.0.0.1:8000/calendar/week/${curDate.getFullYear()}/${getWeek(curDate)}`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -48,19 +53,30 @@ class Grid extends React.Component {
       }
 
       let data = resJson.data;
+      console.log(data);
       let eventList = [];
       for (let dayEventList of data) {
         for (let event of dayEventList) {
-          eventList.push(event);
+          let e = {
+            eventType: event.eventType,
+            title: event.title,
+            startTime: new Date(Date.parse(event.startTime.slice(0, -1) + ".000" + event.startTime.slice(-1))),
+            endTime: new Date(Date.parse(event.endTime.slice(0, -1) + ".000" + event.endTime.slice(-1))),
+            id: event.id,
+          }
+          eventList.push(e);
         }
       }
       this.setState({eventList});
     }
   }
 
-  
-
   render() {
+    if (this.props.curDate.valueOf() != this.state.curDate.valueOf()) {
+      this.getEventList();
+      this.setState({curDate: this.props.curDate});
+    }
+
     let c1 = "#91918c";
     let c2 = "#d6d6c3";
 

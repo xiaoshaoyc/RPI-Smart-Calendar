@@ -42,6 +42,7 @@ class Statistic extends React.PureComponent {
     super(props);
     this.state = {
       curIndex: 0,
+      data: null,
     }
   }
 
@@ -104,6 +105,46 @@ class Statistic extends React.PureComponent {
       </div>
     );
   }
+
+  getData() {
+    // TODO: delete
+    let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    xhr2.withCredentials = true;
+    xhr2.send();
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://127.0.0.1:8000/calendar/week/");
+    xhr.withCredentials = true;
+    xhr.timeout = 10000;
+    xhr.responseType = 'json';
+    // TODO: delete
+    // xhr.withCredentials = true;
+
+    xhr.send();
+    
+    xhr.onerror = function() {
+      console.error("Event block request failed");
+    }
+
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        console.error(`Event block request gets return code ${xhr.status}. ${xhr.statusText}`);
+        return;
+      }
+      let resJson = xhr.response;
+      if (resJson === null) {
+        console.error(`Event block request: can't understand return value`);
+        return;
+      }
+      
+      if (resJson.isSuccess == false) {
+        alert("need login");
+        return;
+      }
+    }
+  }
+
 
   handleClick() {
     let index = this.state.curIndex;

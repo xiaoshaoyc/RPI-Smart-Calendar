@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Calendar from './Calendar/Calendar';
+// import Group from './Group/Group';
 import Nav from './Nav';
 import reportWebVitals from './reportWebVitals';
 
@@ -13,7 +14,9 @@ ReactDOM.render(
         <Calendar />
       </div>
     </div>
-    
+    {/* <div>
+      <Group />
+    </div> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

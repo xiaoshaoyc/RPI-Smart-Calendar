@@ -7,6 +7,9 @@ from .models import Event
 import dateutil.parser
 import datetime
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+import logging
 #return current week schedules
 class CurWeekView(View):
     def get(self,request):
@@ -21,7 +24,7 @@ class WeekView(View):
         schedules = []
         output['data'] = schedules
         # get user
-        user_id = request.session.get('user_id', None)
+        user_id = request.session.get('user_id', 2) # TODO: delete
         if user_id:
             user = User.objects.get(id=user_id)
         else:
@@ -144,21 +147,24 @@ class AnalysisView(View):
             courseinfo['next_time'] = cal_time(events_next_week)
         return JsonResponse(status=200, data = output, safe=False)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
-    def get(self,request):
-        # title = request.POST["title"]
-        # detail = request.POST["details"]
-        # startTime = request.POST["startTime"]
-        # endTime = request.POST["endTime"]
-        title = "SDD MEETING2"
-        details = "MEETING WITH MAV AGAIN"
-        startTime = str(timezone.now())
-        endTime = str(timezone.now()+datetime.timedelta(hours=2))
+    def post(self, request, *args, **kwargs):
+        logger = logging.getLogger(__name__)
 
+        title = request.POST["title"]
+        details = request.POST["details"]
+        startTime = request.POST["startTime"]
+        endTime = request.POST["endTime"]
+        # startTime = str(timezone.now())
+        # endTime = str(timezone.now()+datetime.timedelta(hours=2))
+        logger.error(startTime)
         #calculate time
         startTime = dateutil.parser.parse(startTime, ignoretz=True)
         endTime = dateutil.parser.parse(endTime, ignoretz=True)
+
+        logger.error(startTime)
+
         output = {}
         # get user
         user_id = request.session.get('user_id', None)
@@ -175,6 +181,7 @@ class AddEvent(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
+
 #edit event
 class EditEvent(View):
     def get(self,request,event_id):

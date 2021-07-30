@@ -5,10 +5,10 @@ class EventFrom extends React.Component {
     super(props);
     this.state = {
       eTitle: "",
-      eStartTime: "",
-      eStartTime2: "",
-      eEndTime: "",
-      eEndTime2: "",
+      startTime_p1: "",
+      startTime_p2: "",
+      endTime_p1: "",
+      endTime_p2: "",
       eDetails: "",
       eType: "deadlines",
     }
@@ -23,10 +23,10 @@ class EventFrom extends React.Component {
     console.log('You clicked submit.');
     console.log(`
     title: ${this.state.eTitle}
-    startTime: ${this.state.eStartTime}
-    startTime2: ${this.state.eStartTime2}
-    endTime: ${this.state.eEndTime}
-    endTime2: ${this.state.eEndTime2}
+    startTime_p1: ${this.state.startTime_p1}
+    startTime_p2: ${this.state.startTime_p2}
+    endTime_p1: ${this.state.endTime_p1}
+    endTime_p2: ${this.state.endTime_p2}
     details: ${this.state.eDetails}
     type: ${this.state.eType}
     `);
@@ -39,10 +39,16 @@ class EventFrom extends React.Component {
     let form = document.getElementById("eventForm");
     let formData = new FormData(form);
 
+    let startTime = `${this.state.startTime_p1}T${this.state.startTime_p2}:00.000Z`;
+    let endTime = `${this.state.endTime_p1}T${this.state.endTime_p2}:00.000Z`
+    formData.append("startTime", startTime);
+    formData.append("endTime", endTime);
+
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/calendar/event/add");
+    xhr.open("POST", "http://127.0.0.1:8000/calendar/event/add");
     xhr.timeout = 10000;
     xhr.responseType = 'json';
+    xhr.withCredentials = true;
     xhr.send(formData);
     
     xhr.onerror = function() {
@@ -60,6 +66,8 @@ class EventFrom extends React.Component {
         return;
       }
     }
+    // TODO: delete since no use
+    this.props.updatePage();
   }
 
 
@@ -71,15 +79,15 @@ class EventFrom extends React.Component {
           <input type="text" id="eTitle" name="title" value={this.state.eTitle} onChange={(x) => this.handleChange(x)}/>
           <br />
           <label for="eStartTime">Start time:</label>
-          <input type="date" id="eStartTime" name="startTime" value={this.state.eStartTime} onChange={(x) => this.handleChange(x)}/>
-          <input type="time" id="eStartTime2" name="startTime2" value={this.state.eStartTime2} onChange={(x) => this.handleChange(x)}/>
+          <input type="date" id="startTime_p1" name="startTime_p1" value={this.state.eStartTime} onChange={(x) => this.handleChange(x)}/>
+          <input type="time" id="startTime_p2" name="startTime_p2" value={this.state.eStartTime2} onChange={(x) => this.handleChange(x)}/>
           <br />
           <label for="eEndTime">End time:</label>
-          <input type="date" id="eEndTime" name="endTime" value={this.state.eEndTime} onChange={(x) => this.handleChange(x)}/>
-          <input type="time" id="eEndTime2" name="endTime2" value={this.state.eEndTime2} onChange={(x) => this.handleChange(x)}/>
+          <input type="date" id="endTime_p1" name="endTime_p1" value={this.state.eEndTime} onChange={(x) => this.handleChange(x)}/>
+          <input type="time" id="endTime_p2" name="endTime_p2" value={this.state.eEndTime2} onChange={(x) => this.handleChange(x)}/>
           <br />
           <label for="eDetails">Details:</label>
-          <textarea id="eDetails" value={this.state.eDetails} onChange={(x) => this.handleChange(x)}/>
+          <textarea id="eDetails" name="details" value={this.state.eDetails} onChange={(x) => this.handleChange(x)}/>
           <br />
           <label for="eType">Type:</label>
           <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>

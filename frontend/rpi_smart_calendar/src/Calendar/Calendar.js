@@ -7,6 +7,7 @@ import Detail from './Detail';
 import Grid from './Grid';
 import GridHead from './GridHead';
 import EventFrom from './EventForm';
+import {getWeek} from '../Util';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class Calendar extends React.Component {
 
     this.state = {
       labelList,
-      curEventId: null,
+      curEventId: 99999999,
       date,
       showEventForm: false,
       eventList: [],
@@ -69,12 +70,16 @@ class Calendar extends React.Component {
     this.setState({eventList: newEventList});
   }
 
+  updatePage() {
+    this.forceUpdate();
+  }
+
   render() {
     let formHTML = null;
     if (this.state.showEventForm) {
       formHTML = (
         <div className="eventForm">
-          <EventFrom closeFn={() => this.hideEventForm()} addFn={(x) => this.addEvent(x)} />
+          <EventFrom closeFn={() => this.hideEventForm()} addFn={(x) => this.addEvent(x)} updatePage={() => this.updatePage()}/>
         </div>
       );
     }
@@ -87,10 +92,10 @@ class Calendar extends React.Component {
         </div>
         <div className="main-content">
           <GridHead date={this.state.date} onPrevWeek={() => this.handlePrevWeek()} onNextWeek={() => this.handleNextWeek()} />
-          <Grid handleOpenDetail={(x) => this.handleOpenDetail(x)} eventList={this.state.eventList} />
+          <Grid curDate={this.state.date} handleOpenDetail={(x) => this.handleOpenDetail(x)} eventList={this.state.eventList} />
         </div>
         <div className="right-content">
-          <Detail eventId={this.state.curEventId} onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} />
+          <Detail key={this.state.curEventId} eventId={this.state.curEventId} onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} />
         </div>
         <div className="addEvent">
           <button className="addEvent-btn" onClick={() => this.hanleAddEvent()}>Add</button>
