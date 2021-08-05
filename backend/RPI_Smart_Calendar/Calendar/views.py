@@ -29,7 +29,7 @@ class WeekView(View):
             user = User.objects.get(id=user_id)
         else:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: PLEASE LOGIN'
+            output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
         # get week
         events = user.event_set.all()
@@ -38,7 +38,7 @@ class WeekView(View):
             events_week = events_year.filter(startTime__week=week_num)
         except:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: WEEK NOT EXIST'
+            output["Message"] = 'FAIL: WEEK NOT EXIST'
             return JsonResponse(status=500, data = output, safe=False)
         # get event
         for day in range(1, 8):
@@ -54,7 +54,7 @@ class WeekView(View):
                 schedule.append(jevent)
             schedules.append(schedule)
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCCESS'
+        output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
 #return specified event info
@@ -67,7 +67,7 @@ class EventView(View):
             user = User.objects.get(id=user_id)
         else:
             jevent["isSuccess"] = False
-            jevent["Messgae"] = 'FAIL: PLEASE LOGIN'
+            jevent["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = jevent, safe=False)
         # get event
         events = user.event_set.all()
@@ -75,7 +75,7 @@ class EventView(View):
             event = events.get(id=id)
         except:
             jevent["isSuccess"] = False
-            jevent["Messgae"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
+            jevent["Message"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
 
             return JsonResponse(status=500, data = jevent, safe=False)
         jevent['id'] = event.id
@@ -90,7 +90,7 @@ class EventView(View):
         except:
             pass
         jevent["isSuccess"] = True
-        jevent["Messgae"] = 'SUCCESS'
+        jevent["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
 
 def cal_time(events_week):
@@ -121,7 +121,7 @@ class AnalysisView(View):
             user = User.objects.get(id=user_id)
         else:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: PLEASE LOGIN'
+            output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
         groups = user.groups.all()
         for group in groups:
@@ -138,7 +138,7 @@ class AnalysisView(View):
                 events_next_week = events_year.filter(startTime__week=week_num+1)
             except:
                 output["isSuccess"] = False
-                output["Messgae"] = 'FAIL: WEEK NOT EXIST'
+                output["Message"] = 'FAIL: WEEK NOT EXIST'
                 return JsonResponse(status=500, data = output, safe=False)
             #calculate time
             courseinfo['avg_time'] = cal_time(events_year)
@@ -172,14 +172,14 @@ class AddEvent(View):
             user = User.objects.get(id=user_id)
         else:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: PLEASE LOGIN'
+            output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
         #save event
         event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
                         method = 'manually', type = 'block', details = details)
         event.save()
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCESS'
+        output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
 #edit event
@@ -204,7 +204,7 @@ class EditEvent(View):
             user = User.objects.get(id=user_id)
         else:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: PLEASE LOGIN'
+            output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
         # get event
         events = Event.objects.all().filter(user=user)
@@ -212,11 +212,11 @@ class EditEvent(View):
             event = events.get(id = event_id)
         except:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: EVENT NOT EXIST'
+            output["Message"] = 'FAIL: EVENT NOT EXIST'
             return JsonResponse(status=401, data = output, safe=False)
         if event.type !='block':
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: NOT BLOCK'
+            output["Message"] = 'FAIL: NOT BLOCK'
             return JsonResponse(status=401, data = output, safe=False)
         #delete event
         event.delete()
@@ -225,7 +225,7 @@ class EditEvent(View):
                         method = 'manually', type = 'block', details = details)
         event.save()
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCESS'
+        output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
 class DeleteEvent(View):
@@ -237,7 +237,7 @@ class DeleteEvent(View):
             user = User.objects.get(id=user_id)
         else:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: PLEASE LOGIN'
+            output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
         # get event
         events = Event.objects.all().filter(user=user)
@@ -245,16 +245,16 @@ class DeleteEvent(View):
             event = events.get(id = event_id)
         except:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: EVENT NOT EXIST'
+            output["Message"] = 'FAIL: EVENT NOT EXIST'
             return JsonResponse(status=401, data = output, safe=False)
         if event.type !='block':
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: NOT BLOCK'
+            output["Message"] = 'FAIL: NOT BLOCK'
             return JsonResponse(status=401, data = output, safe=False)
         #delete event
         event.delete()
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCESS'
+        output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
 #Return list of dues passed the time this week or next week
 class DueView(View):
@@ -273,7 +273,7 @@ class DueView(View):
                 eventinfo['endTime'] = event.endTime
                 data.append(eventinfo)
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCCESS'
+        output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
 #update actualTime of the due
@@ -289,11 +289,11 @@ class UpdateDue(View):
             event = Event.objects.get(id = event_id)
         except:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: EVENT NOT EXIST'
+            output["Message"] = 'FAIL: EVENT NOT EXIST'
         #save event
         event.actualTime = actualTime
         event.save()
         output["isSuccess"] = True
-        output["Messgae"] = 'SUCESS: EVENT SAVED'
+        output["Message"] = 'SUCESS: EVENT SAVED'
         return JsonResponse(status=200, data = output, safe=False)
 
