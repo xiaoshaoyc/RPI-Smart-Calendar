@@ -10,14 +10,14 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import logging
-#return current week schedules
+# the class would return current week schedules if logined in
 class CurWeekView(View):
     def get(self,request):
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return WeekView.get(self,request, year_num, week_num)
 
-#return schedules of the specified week
+# the class would return schedules of the specified week if logined in
 class WeekView(View):
     def get(self,request, year_num, week_num):
         output = {}
@@ -57,7 +57,7 @@ class WeekView(View):
         output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#return specified event info
+# the class would return specified event info if logined in
 class EventView(View):
     def get(self,request, id):
         jevent = {}
@@ -92,7 +92,7 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
-
+# the function would return the avergae time of the event set
 def cal_time(events_week):
     week_time = 0
     count = 0
@@ -103,13 +103,13 @@ def cal_time(events_week):
         return 0
     else:
         return week_time/count
-# analysis of current week
+# the class return a analysis of current week
 class CurAnalysisView(View):
     def get(self,request):
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return AnalysisView.get(self,request, year_num, week_num)
-# return analysis
+# the class returns analysis of the specified week
 class AnalysisView(View):
     def get(self,request,year_num,week_num):
         output = {}
@@ -147,6 +147,7 @@ class AnalysisView(View):
             courseinfo['next_time'] = cal_time(events_next_week)
         return JsonResponse(status=200, data = output, safe=False)
 
+# the class add a event for the current user
 @method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
     def post(self, request, *args, **kwargs):
@@ -182,7 +183,7 @@ class AddEvent(View):
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#edit event
+# the class would edit the specified event
 class EditEvent(View):
     def get(self,request,event_id):
         # title = request.POST["title"]
@@ -227,7 +228,7 @@ class EditEvent(View):
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
-
+# the class would delete the specified event
 class DeleteEvent(View):
     def get(self,request,event_id):
         output = {}
@@ -256,7 +257,7 @@ class DeleteEvent(View):
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
-#Return list of dues passed the time this week or next week
+# the class would return a list of dues passed the time this week or next week
 class DueView(View):
     def get(self,request):
         output = {}
@@ -276,7 +277,7 @@ class DueView(View):
         output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#update actualTime of the due
+# the class would update actualTime of the due
 class UpdateDue(View):
     def get(self,request):
         # actualTime = request.POST["actualTime"]

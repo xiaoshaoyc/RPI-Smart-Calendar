@@ -2,10 +2,8 @@ from django.http.response import JsonResponse
 from django.views import View
 from User.models import User
 from .models import Message, MyGroup
-# Create your views here.
 
-#return courses of of the user
-
+# the class return courses of of the user
 class DisplayCourses(View):
     def get(self,request):
         output = {}
@@ -27,6 +25,7 @@ class DisplayCourses(View):
         output["Messgae"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
+# the class whould save the received message sent by the user
 class ReceiveMessage(View):
     def get(self,request,group_id):
         # username = request.POST["username"]
@@ -54,7 +53,8 @@ class ReceiveMessage(View):
         output["isSuccess"] = True
         output["Messgae"] = 'SUCCESS: MESSAGE SAVED'
         return JsonResponse(status=200, data = output, safe=False)
-#return messages of the group
+
+#the class would return all messages of the group
 class DisplayMessages(View):
     def get(self,request,group_id):
         output = {}
@@ -85,7 +85,7 @@ class DisplayMessages(View):
         output["Messgae"] = 'SUCCESS: MESSAGES RETURNED'
         return JsonResponse(status=200, data = output, safe=False)
 
-#return users of the group
+#the class would return users of the group
 class DisplayUsers(View):
     def get(self,request,group_id):
         output = {}
