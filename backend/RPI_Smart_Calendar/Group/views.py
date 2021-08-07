@@ -4,6 +4,7 @@ from User.models import User
 from .models import Message, MyGroup
 
 # the class return courses of of the user
+# return fail message if not login
 class DisplayCourses(View):
     def get(self,request):
         output = {}
@@ -26,6 +27,8 @@ class DisplayCourses(View):
         return JsonResponse(status=200, data = output, safe=False)
 
 # the class whould save the received message sent by the user
+# return fail message if not login
+# return fail message if group not exist
 class ReceiveMessage(View):
     def get(self,request,group_id):
         # username = request.POST["username"]
@@ -54,7 +57,8 @@ class ReceiveMessage(View):
         output["Messgae"] = 'SUCCESS: MESSAGE SAVED'
         return JsonResponse(status=200, data = output, safe=False)
 
-#the class would return all messages of the group
+# the class would return all messages of the group
+# return fail message if group not exist
 class DisplayMessages(View):
     def get(self,request,group_id):
         output = {}
@@ -85,7 +89,8 @@ class DisplayMessages(View):
         output["Messgae"] = 'SUCCESS: MESSAGES RETURNED'
         return JsonResponse(status=200, data = output, safe=False)
 
-#the class would return users of the group
+# the class would return users of the group
+# return fail message if group not exist
 class DisplayUsers(View):
     def get(self,request,group_id):
         output = {}
