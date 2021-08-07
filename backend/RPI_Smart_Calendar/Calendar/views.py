@@ -10,21 +10,25 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import logging
-#return current week schedules
+# the class would return current week schedules if logined in
+# return fail messaege if not login
 class CurWeekView(View):
     def get(self,request):
+        # get current year and week
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return WeekView.get(self,request, year_num, week_num)
 
-#return schedules of the specified week
+# the class would return schedules of the specified week if logined in
+# return fail message if not login
+# return fail message if week not exist
 class WeekView(View):
     def get(self,request, year_num, week_num):
         output = {}
         schedules = []
         output['data'] = schedules
-        # get user
-        user_id = request.session.get('user_id', 2) # TODO: delete
+        # get user id 
+        user_id = request.session.get('user_id', None) 
         if user_id:
             user = User.objects.get(id=user_id)
         else:
@@ -33,6 +37,7 @@ class WeekView(View):
             return JsonResponse(status=401, data = output, safe=False)
         # get week
         events = user.event_set.all()
+        # get needed events if event exist
         try:
             events_year = events.filter(startTime__year=year_num)
             events_week = events_year.filter(startTime__week=week_num)
@@ -40,7 +45,7 @@ class WeekView(View):
             output["isSuccess"] = False
             output["Message"] = 'FAIL: WEEK NOT EXIST'
             return JsonResponse(status=500, data = output, safe=False)
-        # get event
+        # get event and save to output
         for day in range(1, 8):
             schedule = []
             events_day = events_week.filter(startTime__week_day=day)
@@ -57,7 +62,9 @@ class WeekView(View):
         output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#return specified event info
+# the class would return specified event info if logined in
+# return fail message if not login
+# return fail message if event not exist
 class EventView(View):
     def get(self,request, id):
         jevent = {}
@@ -69,15 +76,16 @@ class EventView(View):
             jevent["isSuccess"] = False
             jevent["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = jevent, safe=False)
-        # get event
+        # try to get event
         events = user.event_set.all()
         try:
             event = events.get(id=id)
+        # event not exist
         except:
             jevent["isSuccess"] = False
             jevent["Message"] = 'FAIL: EVENT NOT EXIST FOR THE USER'
-
             return JsonResponse(status=500, data = jevent, safe=False)
+        # save event info
         jevent['id'] = event.id
         jevent['eventType'] = event.type
         jevent['estTime'] = event.estTime()
@@ -92,7 +100,7 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
-
+# the function would return the avergae time of the event set
 def cal_time(events_week):
     week_time = 0
     count = 0
@@ -103,39 +111,46 @@ def cal_time(events_week):
         return 0
     else:
         return week_time/count
-# analysis of current week
+# the class return a analysis of current week if login
+# return fail message if not login
 class CurAnalysisView(View):
     def get(self,request):
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return AnalysisView.get(self,request, year_num, week_num)
-# return analysis
+# the class returns analysis of the specified week
+# return fail message if not login
+# return fail message if week not exist
 class AnalysisView(View):
     def get(self,request,year_num,week_num):
         output = {}
         courses = []
         output['data'] = courses
-        # get user
+        # try to get user
         user_id = request.session.get('user_id', None)
         if user_id:
             user = User.objects.get(id=user_id)
+        # not login
         else:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
+        # get all courses the user is taking
         groups = user.groups.all()
         for group in groups:
+            # add output
             course = {}
             courseinfo = {}
             course[group.group_id] = courseinfo
             courses.append(course)
-            # get week
+            # get all assignments of the coursee
             events = user.event_set.all()
             try:
                 events_year = events.filter(startTime__year=year_num,type = 'line', group = group)
                 events_last_week = events_year.filter(startTime__week=week_num-1)
                 events_this_week = events_year.filter(startTime__week=week_num)
                 events_next_week = events_year.filter(startTime__week=week_num+1)
+            # week not exist
             except:
                 output["isSuccess"] = False
                 output["Message"] = 'FAIL: WEEK NOT EXIST'
@@ -147,22 +162,22 @@ class AnalysisView(View):
             courseinfo['next_time'] = cal_time(events_next_week)
         return JsonResponse(status=200, data = output, safe=False)
 
+# the class add a event for the current user
+# need to pass in title, detail, startTime, and endTime of the event
+# return fail message if not login
 @method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
     def post(self, request, *args, **kwargs):
+        # get the input
         logger = logging.getLogger(__name__)
-
         title = request.POST["title"]
         details = request.POST["details"]
         startTime = request.POST["startTime"]
         endTime = request.POST["endTime"]
-        # startTime = str(timezone.now())
-        # endTime = str(timezone.now()+datetime.timedelta(hours=2))
         logger.error(startTime)
         #calculate time
         startTime = dateutil.parser.parse(startTime, ignoretz=True)
         endTime = dateutil.parser.parse(endTime, ignoretz=True)
-
         logger.error(startTime)
 
         output = {}
@@ -170,6 +185,7 @@ class AddEvent(View):
         user_id = request.session.get('user_id', None)
         if user_id:
             user = User.objects.get(id=user_id)
+        # user not exist
         else:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: PLEASE LOGIN'
@@ -182,7 +198,9 @@ class AddEvent(View):
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#edit event
+# the class edit a event for the current user
+# need to pass in title, detail, startTime, and endTime of the event
+# return fail message if not login
 class EditEvent(View):
     def get(self,request,event_id):
         # title = request.POST["title"]
@@ -210,10 +228,12 @@ class EditEvent(View):
         events = Event.objects.all().filter(user=user)
         try:
             event = events.get(id = event_id)
+        # no event to edit
         except:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: EVENT NOT EXIST'
             return JsonResponse(status=401, data = output, safe=False)
+        # the event is not a assignment
         if event.type !='block':
             output["isSuccess"] = False
             output["Message"] = 'FAIL: NOT BLOCK'
@@ -227,7 +247,8 @@ class EditEvent(View):
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
-
+# the class would delete the specified event
+# return fail message if not login
 class DeleteEvent(View):
     def get(self,request,event_id):
         output = {}
@@ -235,6 +256,7 @@ class DeleteEvent(View):
         user_id = request.session.get('user_id', None)
         if user_id:
             user = User.objects.get(id=user_id)
+        # user not login
         else:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: PLEASE LOGIN'
@@ -243,20 +265,22 @@ class DeleteEvent(View):
         events = Event.objects.all().filter(user=user)
         try:
             event = events.get(id = event_id)
+        # event not exist
         except:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: EVENT NOT EXIST'
             return JsonResponse(status=401, data = output, safe=False)
+        # not a assignment
         if event.type !='block':
             output["isSuccess"] = False
             output["Message"] = 'FAIL: NOT BLOCK'
             return JsonResponse(status=401, data = output, safe=False)
-        #delete event
+        # delete event
         event.delete()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
         return JsonResponse(status=200, data = output, safe=False)
-#Return list of dues passed the time this week or next week
+# the class would return a list of dues passed the time this week or next week
 class DueView(View):
     def get(self,request):
         output = {}
@@ -276,7 +300,9 @@ class DueView(View):
         output["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = output, safe=False)
 
-#update actualTime of the due
+# the class would update actualTime of the due
+# require to pass in actualTime and event_id of the assignment
+# return fail message if no such a event
 class UpdateDue(View):
     def get(self,request):
         # actualTime = request.POST["actualTime"]
