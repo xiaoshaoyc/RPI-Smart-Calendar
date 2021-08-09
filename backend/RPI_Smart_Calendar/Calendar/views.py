@@ -173,24 +173,27 @@ class AddEvent(View):
     def get(self, request):
         # get the input
         logger = logging.getLogger(__name__)
-        # isblock = request.POST["isblock"]
-        isblock = True
         groupid = None
         title = None
         details = None
         startTime = ''
         endTime = None
+        #type = request.POST["type"]
         type = 'line'
-        if isblock:
-            type = 'block'
+        output = {}
+        if type=='block':
         #     title = request.POST["title"]
         #     details = request.POST["details"]
         #     startTime = request.POST["startTime"]
             title = "SDD MEETING3"
             details = "MEETING WITH MAV AGAIN"
             startTime = str(timezone.now())
-        else:
+        elif type=='line':
             groupid = request.POST["groupid"]
+        else:
+            output["isSuccess"] = False
+            output["Message"] = 'FAIL: WRONG TYPE'
+            return JsonResponse(status=401, data = output, safe=False)
         # endTime = request.POST["endTime"]
         endTime = str(timezone.now())
         #calculate time
@@ -201,7 +204,6 @@ class AddEvent(View):
             pass
         endTime = dateutil.parser.parse(endTime, ignoretz=True)
         logger.error(startTime) 
-        output = {}
         # get user
         user_id = request.session.get('user_id', None)
         if user_id:
@@ -213,7 +215,7 @@ class AddEvent(View):
             return JsonResponse(status=401, data = output, safe=False)
         # get group
         group = None
-        if not isblock:
+        if type=='line':
             try:
                 group = MyGroup.objects.all().get(group_id = groupid)
             except:
@@ -221,7 +223,7 @@ class AddEvent(View):
                 output["Message"] = 'FAIL: USER IS NOT IN THE GROUP'
                 return JsonResponse(status=401, data = output, safe=False)
         #save event
-        if isblock:
+        if type=='block':
             event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
                         method = 'manually', type = type, details = details)
         else:
