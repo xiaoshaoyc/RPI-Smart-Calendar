@@ -1,3 +1,4 @@
+from Group.models import MyGroup
 from django.http.response import JsonResponse
 from django.views import generic
 from datetime import date
@@ -5,6 +6,7 @@ from django.views import View
 from User.models import User
 from .models import Event
 import dateutil.parser
+import json
 import datetime
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -163,24 +165,45 @@ class AnalysisView(View):
         return JsonResponse(status=200, data = output, safe=False)
 
 # the class add a event for the current user
-# need to pass in title, detail, startTime, and endTime of the event
+# need to pass in title, detail, startTime, and endTime of the event if isblock
+# need to pass in groupid and endTime otherwise
 # return fail message if not login
 @method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
-    def post(self, request, *args, **kwargs):
+    def get(self, request):
         # get the input
         logger = logging.getLogger(__name__)
-        title = request.POST["title"]
-        details = request.POST["details"]
-        startTime = request.POST["startTime"]
-        endTime = request.POST["endTime"]
-        logger.error(startTime)
-        #calculate time
-        startTime = dateutil.parser.parse(startTime, ignoretz=True)
-        endTime = dateutil.parser.parse(endTime, ignoretz=True)
-        logger.error(startTime)
-
+        groupid = None
+        title = None
+        # details = request.POST["details"] 
+        details = 'test details' 
+        startTime = ''
+        endTime = None
+        #type = request.POST["type"]
+        type = 'line'
         output = {}
+        if type=='block':
+        #     title = request.POST["title"]
+        #     startTime = request.POST["startTime"]
+            title = "SDD MEETING3"
+            startTime = str(timezone.now())
+        elif type=='line':
+            # groupid = request.POST["groupid"]
+            groupid = 'MATH4090'
+        else:
+            output["isSuccess"] = False
+            output["Message"] = 'FAIL: WRONG TYPE'
+            return JsonResponse(status=401, data = output, safe=False)
+        # endTime = request.POST["endTime"]
+        endTime = str(timezone.now())
+        #calculate time
+        logger.error(startTime)
+        try:
+            startTime = dateutil.parser.parse(startTime, ignoretz=True)
+        except:
+            pass
+        endTime = dateutil.parser.parse(endTime, ignoretz=True)
+        logger.error(startTime) 
         # get user
         user_id = request.session.get('user_id', None)
         if user_id:
@@ -190,9 +213,22 @@ class AddEvent(View):
             output["isSuccess"] = False
             output["Message"] = 'FAIL: PLEASE LOGIN'
             return JsonResponse(status=401, data = output, safe=False)
+        # get group
+        group = None
+        if type=='line':
+            try:
+                group = MyGroup.objects.all().get(group_id = groupid)
+            except:
+                output["isSuccess"] = False
+                output["Message"] = 'FAIL: USER IS NOT IN THE GROUP'
+                return JsonResponse(status=401, data = output, safe=False)
         #save event
-        event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
-                        method = 'manually', type = 'block', details = details)
+        if type=='block':
+            event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
+                        method = 'manually', type = type, details = details)
+        else:
+            event = Event(user = user, group = group, endTime = endTime,
+                        method = 'manually', type = type, details = details)
         event.save()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
@@ -203,50 +239,15 @@ class AddEvent(View):
 # return fail message if not login
 class EditEvent(View):
     def get(self,request,event_id):
-        # title = request.POST["title"]
-        # detail = request.POST["details"]
-        # startTime = request.POST["startTime"]
-        # endTime = request.POST["endTime"]
-        title = "SDD MEETING3"
-        details = "MEETING WITH MAV AGAIN"
-        startTime = str(timezone.now())
-        endTime = str(timezone.now()+datetime.timedelta(hours=2))
-
-        #calculate time
-        startTime = dateutil.parser.parse(startTime, ignoretz=True)
-        endTime = dateutil.parser.parse(endTime, ignoretz=True)
-        output = {}
-        # get user
-        user_id = request.session.get('user_id', None)
-        if user_id:
-            user = User.objects.get(id=user_id)
-        else:
-            output["isSuccess"] = False
-            output["Message"] = 'FAIL: PLEASE LOGIN'
-            return JsonResponse(status=401, data = output, safe=False)
-        # get event
-        events = Event.objects.all().filter(user=user)
-        try:
-            event = events.get(id = event_id)
-        # no event to edit
-        except:
-            output["isSuccess"] = False
-            output["Message"] = 'FAIL: EVENT NOT EXIST'
-            return JsonResponse(status=401, data = output, safe=False)
-        # the event is not a assignment
-        if event.type !='block':
-            output["isSuccess"] = False
-            output["Message"] = 'FAIL: NOT BLOCK'
-            return JsonResponse(status=401, data = output, safe=False)
         #delete event
-        event.delete()
-        #save event
-        event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
-                        method = 'manually', type = 'block', details = details)
-        event.save()
-        output["isSuccess"] = True
-        output["Message"] = 'SUCESS'
-        return JsonResponse(status=200, data = output, safe=False)
+        myjson = DeleteEvent.get(self,request,event_id)
+        data = json.loads(myjson.content)
+        if data['isSuccess']==False:
+            return myjson
+        #add event
+        # AddEvent.post(self, request)
+        return AddEvent.get(self, request)
+
 # the class would delete the specified event
 # return fail message if not login
 class DeleteEvent(View):
@@ -269,11 +270,6 @@ class DeleteEvent(View):
         except:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: EVENT NOT EXIST'
-            return JsonResponse(status=401, data = output, safe=False)
-        # not a assignment
-        if event.type !='block':
-            output["isSuccess"] = False
-            output["Message"] = 'FAIL: NOT BLOCK'
             return JsonResponse(status=401, data = output, safe=False)
         # delete event
         event.delete()
