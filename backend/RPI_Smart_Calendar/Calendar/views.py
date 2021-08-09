@@ -175,7 +175,8 @@ class AddEvent(View):
         logger = logging.getLogger(__name__)
         groupid = None
         title = None
-        details = None
+        # details = request.POST["details"] 
+        details = 'test details' 
         startTime = ''
         endTime = None
         #type = request.POST["type"]
@@ -183,13 +184,12 @@ class AddEvent(View):
         output = {}
         if type=='block':
         #     title = request.POST["title"]
-        #     details = request.POST["details"]
         #     startTime = request.POST["startTime"]
             title = "SDD MEETING3"
-            details = "MEETING WITH MAV AGAIN"
             startTime = str(timezone.now())
         elif type=='line':
-            groupid = request.POST["groupid"]
+            # groupid = request.POST["groupid"]
+            groupid = 'MATH4090'
         else:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: WRONG TYPE'
@@ -228,7 +228,7 @@ class AddEvent(View):
                         method = 'manually', type = type, details = details)
         else:
             event = Event(user = user, group = group, endTime = endTime,
-                        method = 'manually', type = type)
+                        method = 'manually', type = type, details = details)
         event.save()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'

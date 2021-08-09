@@ -52,6 +52,8 @@ class Event(models.Model):
     def calculate_estTime(self):
         #get all dues with actualTime
         events = Event.objects.filter(type = 'line',actualTime__isnull=False)
+        if len(events)==0:
+            return 0
         X = []
         y = []
         # get data first
@@ -111,7 +113,10 @@ class Event(models.Model):
         if self.type=='block':
             return self.details
         else:
-            return self.group.name+ ' DUE'
+            if self.details=='':
+                return self.group.name+ ' DUE'
+            else:
+                return self.details
     # check if the event was published within two weeks
     def was_published_recently(self):
         now = timezone.now()
