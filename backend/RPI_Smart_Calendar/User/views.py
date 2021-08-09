@@ -43,6 +43,7 @@ class Authenticate(View):
             output["auth"] = False
         return JsonResponse(status=500, data = output, safe=False)
 
+
 # register the user
 class Register(View):
     def get(self, request):
@@ -75,3 +76,4 @@ class Register(View):
         output["message"] = "SUCCESS: USER REGISTERED"
         output["auth"] = True
         return JsonResponse(status=200, data = output, safe=False)
+
