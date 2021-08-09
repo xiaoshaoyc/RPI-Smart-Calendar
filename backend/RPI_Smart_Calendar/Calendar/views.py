@@ -247,6 +247,7 @@ class EditEvent(View):
         #add event
         # AddEvent.post(self, request)
         return AddEvent.get(self, request)
+
 # the class would delete the specified event
 # return fail message if not login
 class DeleteEvent(View):
