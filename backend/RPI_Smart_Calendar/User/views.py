@@ -42,3 +42,36 @@ class Authenticate(View):
             output["message"] = "ERROR: LOGIN FAILURE, USER DOES NOT EXSIST"
             output["auth"] = False
         return JsonResponse(status=500, data = output, safe=False)
+
+# register the user
+class Register(View):
+    def get(self, request):
+        # email = request.POST["email"]
+        # username = request.POST["username"]
+        # password = request.POST["password"]
+        # repeat = request.POST["repeat"]
+        username = 'harry1234'
+        password = '123456'
+        repeat = '123456'
+        email = 'harry1234@rpi.edu'
+        output = {}
+        # different passwords
+        if(password != repeat):
+            output["message"] = "ERROR: USER EXIST"
+            output["auth"] = False
+            return JsonResponse(status=500, data = output, safe=False)
+        # try to get the user within the database
+        try:
+            user = User.objects.get(username=username)
+            output["message"] = "ERROR: USER EXIST"
+            output["auth"] = False
+            return JsonResponse(status=500, data = output, safe=False)
+        # user not exit
+        except User.DoesNotExist:
+            # save the user
+            user = User(username=username, email = email)
+            user.set_password(password)
+            user.save()
+        output["message"] = "SUCCESS: USER REGISTERED"
+        output["auth"] = True
+        return JsonResponse(status=200, data = output, safe=False)

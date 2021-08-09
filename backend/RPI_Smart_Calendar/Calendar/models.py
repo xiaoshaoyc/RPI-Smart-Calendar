@@ -118,4 +118,7 @@ class Event(models.Model):
         return now - datetime.timedelta(weeks=2) <= self.endTime <= now
     # the displayed name of the model is title
     def __str__(self):
-        return self.title
+        if self.type == 'block':
+            return self.title
+        else:
+            return self.group.name+" DUE"
