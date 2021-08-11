@@ -212,18 +212,18 @@ class AddEvent(View):
             except:
                 output["isSuccess"] = False
                 output["Message"] = 'FAIL: USER IS NOT IN THE GROUP'
-                return JsonResponse(status=401, data = output, safe=False)
+                return JsonResponse(status=401, data=output, safe=False)
         #save event
-        if type=='block':
-            event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
-                        method = 'manual', type = type, details = details)
-        else:
-            event = Event(user = user, group = group, endTime = endTime,
-                        method = 'manual', type = type, details = details)
+        # if type=='block':
+        #     event = Event(user=user, title=title, startTime=startTime, endTime=endTime,
+        #                 method='manual', type=type, details=details, group=group)
+        # else:
+        event = Event(user=user, title=title, startTime=startTime, endTime=endTime,
+                    method='manual', type=type, details=details, group=group)
         event.save()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
-        return JsonResponse(status=200, data = output, safe=False)
+        return JsonResponse(status=200, data=output, safe=False)
 
 # the class edit a event for the current user
 # need to pass in title, detail, startTime, and endTime of the event
