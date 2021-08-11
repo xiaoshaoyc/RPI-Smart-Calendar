@@ -95,7 +95,7 @@ class EventView(View):
         jevent['method'] = event.method
         jevent['title'] = event.get_title()
         jevent['startTime'] = event.startTime
-        jevent['endTime'] = event.endTIme
+        jevent['endTime'] = event.endTime
         jevent['label'] = []
         try:
             jevent['label'].append(event.group.group_id)
