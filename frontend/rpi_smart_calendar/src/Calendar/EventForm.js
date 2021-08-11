@@ -93,7 +93,7 @@ class EventFrom extends React.Component {
           <br />
           <label for="eType">Type:</label>
           <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
-            <option value="line">deadlines</option>
+            <option value="line">deadline</option>
             <option value="block">event</option>
           </select>
           <br />

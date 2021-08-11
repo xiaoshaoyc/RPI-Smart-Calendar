@@ -56,6 +56,9 @@ class Grid extends React.Component {
       }
 
       let data = resJson.data;
+      let temp = data.shift();
+      console.log(temp);
+      data.push(temp);
       console.log(data); // TODO
       let eventList = [];
       for (let dayEventList of data) {

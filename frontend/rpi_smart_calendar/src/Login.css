@@ -1,0 +1,8 @@
+.login-container {
+  position: fixed;
+  max-width: 500px;
+  margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+  left: 0;
+  right: 0;
+  background-color: aliceblue;
+}

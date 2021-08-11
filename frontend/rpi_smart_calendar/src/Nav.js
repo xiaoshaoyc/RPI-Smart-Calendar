@@ -1,50 +1,74 @@
 import React from 'react';
 import './Nav.css';
 import Config from './Config';
+import Login from './Login';
+import {getCookie, eraseCookie} from './Util';
 
 class Nav extends React.Component {
   constructor(props) {
     super(props);
+    let username = getCookie("username");
+    if (username === null) {
+      username = "Anonymous";
+    }
     this.state = {
       isLogin: false,
+      disableLogin: true,
+      showLoginForm: false,
+      username,
     }
+    this.isLogin();
   }
 
-  handleLogin() {
+  isLogin() {
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://${Config.BACKEND_URL}/login/auth/`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/week/`);
     xhr.withCredentials = true;
     xhr.responseType = 'json';
 
-    let formData = new FormData();
-    formData.append("username", "shao");
-    formData.append("password", "123456");
-
-    xhr.send(formData);
+    xhr.send();
     xhr.onerror = function() {
       console.error("Login failed");
     }
 
     xhr.onload = () => {
+      if (xhr.status === 401) {
+        this.setState({isLogin: false});
+      } else {
+        this.setState({isLogin: true});
+      }
+      this.setState({disableLogin: false});
+    }
+  }
+
+  setUserName(username) {
+    this.setState({username});
+  }
+
+  handleLogin() {
+    this.setState({showLoginForm: true});
+  }
+
+  handleLogout() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", `http://${Config.BACKEND_URL}/login/logout/`);
+    xhr.withCredentials = true;
+    xhr.responseType = 'json';
+
+    xhr.send();
+    xhr.onerror = function() {
+      console.error("Logout failed");
+    }
+    xhr.onload = () => {
       if (xhr.status !== 200) {
         console.error(`Login: Return code ${xhr.status}. ${xhr.statusText}`);
         return;
       }
-      let resJson = xhr.response;
-      if (resJson === null) {
-        console.error(`Login: can't understand return value`);
-        return;
-      }
-
-      if (resJson.auth === true) {
-        alert("Login Success");
-        this.setState({isLogin: true})
-      }
+      alert("Logout");
+      eraseCookie("username");
+      this.setState({isLogin: false})
+      window.location.reload();
     }
-  }
-
-  handleLogout() {
-
   }
 
   handleLoginOut() {
@@ -63,13 +87,19 @@ class Nav extends React.Component {
     } else {
       loginMessage = "Login in";
     }
+    let HTML = null;
+    if (this.state.showLoginForm) {
+      HTML = (<Login />);
+    }
+
     return (
       <div className="nav">
         <button className="nav-item nav-item1">X</button>
         <span className="nav-item nav-item2"><b>RPI Smart Calendar</b></span>
         <img className="nav-item nav-item3" src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg" alt="user-img" />
-        <span className="nav-item nav-item4">Harry</span>
-        <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()}>{loginMessage}</button>
+        <span className="nav-item nav-item4">{this.state.username}</span>
+        <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()} disabled={this.state.disableLogin}>{loginMessage}</button>
+        {HTML}
       </div>
     )
   }
