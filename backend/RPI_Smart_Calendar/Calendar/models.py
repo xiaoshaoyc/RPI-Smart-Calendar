@@ -102,10 +102,10 @@ class Event(models.Model):
     # return title if type == block
     # return group id + 'DUE' if type == line
     def get_title(self):
-        if self.type=='block':
-            return self.title
+        if self.type=='line':
+            return self.group.group_id + ' DUE'
         else:
-            return self.group.group_id+ ' DUE'
+            return self.title
     # get detail of the event
     # return detail if type == block
     # return group name + 'DUE' if type == line
@@ -114,7 +114,7 @@ class Event(models.Model):
             return self.details
         else:
             if self.details=='':
-                return self.group.name+ ' DUE'
+                return self.group.name + ' DUE'
             else:
                 return self.details
     # check if the event was published within two weeks
@@ -126,4 +126,4 @@ class Event(models.Model):
         if self.type == 'block':
             return self.title
         else:
-            return self.group.name+" DUE"
+            return self.group.name + " DUE"

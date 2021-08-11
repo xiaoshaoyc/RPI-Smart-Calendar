@@ -186,7 +186,7 @@ class AddEvent(View):
         if type not in ['block', 'line']:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: WRONG TYPE'
-            return JsonResponse(status=401, data = output, safe=False)
+            return JsonResponse(status=400, data = output, safe=False)
         #calculate time
         try:
             startTime = dateutil.parser.parse(startTime, ignoretz=True)
