@@ -14,6 +14,7 @@ class Nav extends React.Component {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", `http://${Config.BACKEND_URL}/login/auth/`);
     xhr.withCredentials = true;
+    xhr.responseType = 'json';
 
     let formData = new FormData();
     formData.append("username", "shao");
@@ -34,10 +35,24 @@ class Nav extends React.Component {
         console.error(`Login: can't understand return value`);
         return;
       }
+      console.log(resJson);
+      console.log(resJson.message);
       if (resJson.auth === true) {
         alert("Login Success");
         this.setState({isLogin: true})
       }
+    }
+  }
+
+  handleLogout() {
+
+  }
+
+  handleLoginOut() {
+    if (this.state.isLogin) {
+      this.handleLogout();
+    } else {
+      this.handleLogin();
     }
 
   }
@@ -55,7 +70,7 @@ class Nav extends React.Component {
         <span className="nav-item nav-item2"><b>RPI Smart Calendar</b></span>
         <img className="nav-item nav-item3" src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg" alt="user-img" />
         <span className="nav-item nav-item4">Harry</span>
-        <button className="nav-item nav-item5" onClick={() => this.handleLogin()}>{loginMessage}</button>
+        <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()}>{loginMessage}</button>
       </div>
     )
   }
