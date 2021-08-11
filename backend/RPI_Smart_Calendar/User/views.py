@@ -17,11 +17,9 @@ class Logout(View):
 # if pass the authentiation, login the user
 # else return fail message
 class Authenticate(View):
-    def get(self, request):
-        # username = request.POST["username"]
-        # password = request.POST["password"]
-        username = 'harry123'
-        password = '123456'
+    def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
         output = {}
         # try to get the user within the database
         try:

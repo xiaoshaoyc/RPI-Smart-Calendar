@@ -102,6 +102,7 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
+
 # the function would return the avergae time of the event set
 def cal_time(events_week):
     week_time = 0
@@ -113,6 +114,7 @@ def cal_time(events_week):
         return 0
     else:
         return week_time/count
+
 # the class return a analysis of current week if login
 # return fail message if not login
 class CurAnalysisView(View):
@@ -120,6 +122,7 @@ class CurAnalysisView(View):
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return AnalysisView.get(self,request, year_num, week_num)
+        
 # the class returns analysis of the specified week
 # return fail message if not login
 # return fail message if week not exist
@@ -162,6 +165,7 @@ class AnalysisView(View):
             courseinfo['last_time'] = cal_time(events_last_week)
             courseinfo['this_time'] = cal_time(events_this_week)
             courseinfo['next_time'] = cal_time(events_next_week)
+
         return JsonResponse(status=200, data = output, safe=False)
 
 # the class add a event for the current user
@@ -170,43 +174,28 @@ class AnalysisView(View):
 # return fail message if not login
 @method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
-    def get(self, request):
+    def post(self, request):
         # get the input
-        logger = logging.getLogger(__name__)
-        groupid = None
-        title = None
-        # details = request.POST["details"] 
-        details = 'test details' 
-        startTime = ''
-        endTime = None
-        #type = request.POST["type"]
-        type = 'line'
+        title = request.POST["title"]
+        details = request.POST["details"]
+        startTime = request.POST["startTime"]
+        endTime = request.POST["endTime"]
+        type = request.POST["type"]
+        groupid = request.POST["groupid"]
         output = {}
-        if type=='block':
-        #     title = request.POST["title"]
-        #     startTime = request.POST["startTime"]
-            title = "SDD MEETING3"
-            startTime = str(timezone.now())
-        elif type=='line':
-            # groupid = request.POST["groupid"]
-            groupid = 'MATH4090'
-        else:
+        if type not in ['block', 'line']:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: WRONG TYPE'
             return JsonResponse(status=401, data = output, safe=False)
-        # endTime = request.POST["endTime"]
-        endTime = str(timezone.now())
         #calculate time
-        logger.error(startTime)
         try:
             startTime = dateutil.parser.parse(startTime, ignoretz=True)
+            endTime = dateutil.parser.parse(endTime, ignoretz=True)
         except:
-            pass
-        endTime = dateutil.parser.parse(endTime, ignoretz=True)
-        logger.error(startTime) 
+            return JsonResponse(status=500, data={})
         # get user
         user_id = request.session.get('user_id', None)
-        if user_id:
+        if user_id is not None:
             user = User.objects.get(id=user_id)
         # user not exist
         else:
