@@ -2,7 +2,9 @@ from django.http.response import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.views import View
 from .models import User
-
+from django.contrib import messages
+from .forms import NewUserForm
+from django.shortcuts import  render, redirect
 # the class would log the user out of the group
 class Logout(View):
     def get(self, request):
@@ -42,36 +44,47 @@ class Authenticate(View):
         return JsonResponse(status=500, data = output, safe=False)
 
 
-# register the user
-class Register(View):
-    def get(self, request):
-        # email = request.POST["email"]
-        # username = request.POST["username"]
-        # password = request.POST["password"]
-        # repeat = request.POST["repeat"]
-        username = 'harry1234'
-        password = '123456'
-        repeat = '123456'
-        email = 'harry1234@rpi.edu'
-        output = {}
-        # different passwords
-        if(password != repeat):
-            output["message"] = "ERROR: USER EXIST"
-            output["auth"] = False
-            return JsonResponse(status=500, data = output, safe=False)
-        # try to get the user within the database
-        try:
-            user = User.objects.get(username=username)
-            output["message"] = "ERROR: USER EXIST"
-            output["auth"] = False
-            return JsonResponse(status=500, data = output, safe=False)
-        # user not exit
-        except User.DoesNotExist:
-            # save the user
-            user = User(username=username, email = email)
-            user.set_password(password)
-            user.save()
-        output["message"] = "SUCCESS: USER REGISTERED"
-        output["auth"] = True
-        return JsonResponse(status=200, data = output, safe=False)
+# uncomment later
+# # register the user
+# class Register(View):
+#     def get(self, request):
+#         # email = request.POST["email"]
+#         # username = request.POST["username"]
+#         # password = request.POST["password"]
+#         # repeat = request.POST["repeat"]
+#         username = 'harry1234'
+#         password = '123456'
+#         repeat = '123456'
+#         email = 'harry1234@rpi.edu'
+#         output = {}
+#         # different passwords
+#         if(password != repeat):
+#             output["message"] = "ERROR: USER EXIST"
+#             output["auth"] = False
+#             return JsonResponse(status=500, data = output, safe=False)
+#         # try to get the user within the database
+#         try:
+#             user = User.objects.get(username=username)
+#             output["message"] = "ERROR: USER EXIST"
+#             output["auth"] = False
+#             return JsonResponse(status=500, data = output, safe=False)
+#         # user not exit
+#         except User.DoesNotExist:
+#             # save the user
+#             user = User(username=username, email = email)
+#             user.set_password(password)
+#             user.save()
+#         output["message"] = "SUCCESS: USER REGISTERED"
+#         output["auth"] = True
+#         return JsonResponse(status=200, data = output, safe=False)
 
+def register_request(request):
+	if request.method == "POST":
+		form = NewUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			messages.success(request, "Registration successful." )
+			return redirect("User:authenticate")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = NewUserForm()
+	return render (request=request, template_name="User/register.html", context={"register_form":form})
