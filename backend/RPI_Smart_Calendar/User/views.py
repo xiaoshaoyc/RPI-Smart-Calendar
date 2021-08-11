@@ -46,6 +46,7 @@ class Authenticate(View):
         return JsonResponse(status=500, data = output, safe=False)
 
 
+# uncomment later
 # # register the user
 # class Register(View):
 #     def get(self, request):
