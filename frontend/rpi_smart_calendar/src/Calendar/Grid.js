@@ -1,7 +1,7 @@
 import React from 'react';
 import EventBlock from './EventBlock';
 import './Grid.css';
-import {getWeek} from '../Util';
+import {getWeek, parseDate} from '../Util';
 import Config from '../Config';
 
 class Grid extends React.Component {
@@ -56,15 +56,15 @@ class Grid extends React.Component {
       }
 
       let data = resJson.data;
-      console.log(data);
+      console.log(data); // TODO
       let eventList = [];
       for (let dayEventList of data) {
         for (let event of dayEventList) {
           let e = {
             eventType: event.eventType,
             title: event.title,
-            startTime: new Date(Date.parse(event.startTime.slice(0, -1) + ".000" + event.startTime.slice(-1))),
-            endTime: new Date(Date.parse(event.endTime.slice(0, -1) + ".000" + event.endTime.slice(-1))),
+            startTime: parseDate(event.startTime),
+            endTime: parseDate(event.endTime),
             id: event.id,
           }
           eventList.push(e);
@@ -104,12 +104,14 @@ class Grid extends React.Component {
         <EventBlock key={event.id} data={event} onOpenDetail={() => this.props.handleOpenDetail(event.id)} />
       );
     }
-    eventHTML.push(
-      <EventBlock key={test1.id} data={test1} onOpenDetail={() => this.props.handleOpenDetail(test1.id)} />
-    );
-    eventHTML.push(
-      <EventBlock key={test2.id} data={test2} onOpenDetail={() => this.props.handleOpenDetail(test2.id)} />
-    );
+    if (Config.DEBUG_TEST_DATA) {
+      eventHTML.push(
+        <EventBlock key={test1.id} data={test1} onOpenDetail={() => this.props.handleOpenDetail(test1.id)} />
+      );
+      eventHTML.push(
+        <EventBlock key={test2.id} data={test2} onOpenDetail={() => this.props.handleOpenDetail(test2.id)} />
+      );
+    }
     let rows = [];
     for (let i = 0; i < 24; i++) {
       rows.push(i/24*100);

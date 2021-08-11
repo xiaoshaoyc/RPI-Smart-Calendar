@@ -11,7 +11,7 @@ class EventFrom extends React.Component {
       endTime_p1: "",
       endTime_p2: "",
       eDetails: "",
-      eType: "deadlines",
+      eType: "block",
       eGroup: "",
     }
   }
@@ -68,9 +68,8 @@ class EventFrom extends React.Component {
         console.error(`Event block request: can't understand return value`);
         return;
       }
+      window.location.reload();
     }
-    // TODO: delete since no use
-    this.props.updatePage();
   }
 
 

@@ -21,10 +21,10 @@ class Event(models.Model):
         line = 'line'
     # user indicates the user of the event
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE, default='')
+                             on_delete=models.CASCADE)
     # title indicates the event tile if type == block
     # no need to set if the type == line
-    title = models.CharField(max_length=256, blank=True, null=True)
+    title = models.CharField(max_length=256)
     # addTime indicates the time the event is added
     addTime = models.DateTimeField(auto_now_add=True)
     # startTime indicates when a event would start if type == block
@@ -37,10 +37,10 @@ class Event(models.Model):
     # method indicates whether the event is added by synchronization or manually 
     method = models.CharField(max_length=32, choices=methods.choices, default='sync')
     # type indicates whether the event is a block or line
-    type = models.CharField(max_length=32, choices=types.choices)
+    type = models.CharField(max_length=32, choices=types.choices, default='block')
     # detail descriptions about the event if type == block
     # no need to set if type == line
-    details = models.CharField(max_length=1024, blank=True, null=True)
+    details = models.CharField(max_length=1024, blank=True, default='')
     # no need to set if type == block
     # actualTime indicates the actual time used by the user to finish the assignment if type == line
     # no need to set if unfinished if type == line
@@ -103,7 +103,8 @@ class Event(models.Model):
     # return group id + 'DUE' if type == line
     def get_title(self):
         if self.type=='line':
-            return self.group.group_id + ' DUE'
+            if (self.group != None):
+                return self.group.group_id + ' DUE'
         else:
             return self.title
     # get detail of the event

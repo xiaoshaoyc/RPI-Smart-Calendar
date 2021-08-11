@@ -35,8 +35,7 @@ class Nav extends React.Component {
         console.error(`Login: can't understand return value`);
         return;
       }
-      console.log(resJson);
-      console.log(resJson.message);
+
       if (resJson.auth === true) {
         alert("Login Success");
         this.setState({isLogin: true})

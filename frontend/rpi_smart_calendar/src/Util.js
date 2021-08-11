@@ -35,3 +35,10 @@ export function getRandomColor() {
   }
   return color;
 }
+
+export function parseDate(str) {
+  // TODO: this may be a hack
+  let offset = new Date().getTimezoneOffset() * 60 * 1000;
+  let date = new Date(Date.parse(str) + offset);
+  return date;
+}
