@@ -7,7 +7,6 @@ import Detail from './Detail';
 import Grid from './Grid';
 import GridHead from './GridHead';
 import EventFrom from './EventForm';
-import {getWeek} from '../Util';
 
 class Calendar extends React.Component {
   constructor(props) {

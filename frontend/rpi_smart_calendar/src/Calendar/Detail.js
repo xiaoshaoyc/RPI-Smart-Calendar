@@ -1,5 +1,6 @@
-import React from 'react'
-import './Detail.css'
+import React from 'react';
+import './Detail.css';
+import Config from '../Config';
 
 var DAY_TO_WEEK = [
   "Sunday"
@@ -49,14 +50,16 @@ class Detail extends React.Component {
 
   getDetails() {
     // TODO: delete
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    if (Config.DEBUG_ALWAYS_LOGIN) {
+      let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
     xhr2.withCredentials = true;
     xhr2.send();
+    }
 
     let id = this.props.eventId;
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/event/${id}`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/event/${id}`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -80,7 +83,7 @@ class Detail extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
@@ -101,12 +104,12 @@ class Detail extends React.Component {
 
   handleDelete() {
     let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
     xhr2.withCredentials = true;
     xhr2.send();
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/event/${this.state.id}/delete`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/event/${this.state.id}/delete`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -127,7 +130,7 @@ class Detail extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }

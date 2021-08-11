@@ -1,4 +1,5 @@
 import React from 'react';
+import Config from '../Config';
 
 class EventFrom extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class EventFrom extends React.Component {
       endTime_p2: "",
       eDetails: "",
       eType: "deadlines",
+      eGroup: "",
     }
   }
 
@@ -29,6 +31,7 @@ class EventFrom extends React.Component {
     endTime_p2: ${this.state.endTime_p2}
     details: ${this.state.eDetails}
     type: ${this.state.eType}
+    group: ${this.state.eGroup}
     `);
     this.props.closeFn();
     this.addEvent();
@@ -45,7 +48,7 @@ class EventFrom extends React.Component {
     formData.append("endTime", endTime);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://127.0.0.1:8000/calendar/event/add");
+    xhr.open("POST", `http://${Config.BACKEND_URL}/calendar/event/add`);
     xhr.timeout = 10000;
     xhr.responseType = 'json';
     xhr.withCredentials = true;
@@ -91,9 +94,12 @@ class EventFrom extends React.Component {
           <br />
           <label for="eType">Type:</label>
           <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
-            <option value="deadline">deadlines</option>
+            <option value="line">deadlines</option>
             <option value="event">event</option>
           </select>
+          <br />
+          <label for="eGroup">Group:</label>
+          <input type="text" id="eGroup" name="groupid" value={this.state.eGroup} onChange={(x) => this.handleChange(x)} />
           <br />
           <input type="submit" value="Submit" />
           <button onClick={this.props.closeFn}>Cancel</button>

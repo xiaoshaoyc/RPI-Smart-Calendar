@@ -1,7 +1,8 @@
 import React from 'react';
 import EventBlock from './EventBlock';
 import './Grid.css';
-import {getWeek} from '../Util'
+import {getWeek} from '../Util';
+import Config from '../Config';
 
 class Grid extends React.Component {
   constructor(props) {
@@ -14,16 +15,18 @@ class Grid extends React.Component {
     this.getEventList();
   }
   getEventList() {
-    // TODO: delete
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
-    xhr2.withCredentials = true;
-    xhr2.send();
-
+    if (Config.DEBUG_ALWAYS_LOGIN) {
+      // TODO: delete
+      let xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
+      xhr2.withCredentials = true;
+      xhr2.send();
+    }
+   
     let curDate = this.props.curDate;
     console.log(`CurWeek: ${getWeek(curDate)}`);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/week/${curDate.getFullYear()}/${getWeek(curDate)}`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/week/${curDate.getFullYear()}/${getWeek(curDate)}`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -47,7 +50,7 @@ class Grid extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
@@ -72,7 +75,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    if (this.props.curDate.valueOf() != this.state.curDate.valueOf()) {
+    if (this.props.curDate.valueOf() !== this.state.curDate.valueOf()) {
       this.getEventList();
       this.setState({curDate: this.props.curDate});
     }
