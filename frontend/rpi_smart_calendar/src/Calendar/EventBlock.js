@@ -32,7 +32,7 @@ class EventBlock extends React.Component {
       return (
         <div 
           className="event-item event-item__line" 
-          style={{inset:`${top-0.5}% ${right}% ${bottom-0.5}% ${left}%`}}
+          style={{inset:`${top-0.5}% ${right}% ${100-top-0.7}% ${left}%`}}
           onClick={this.props.onOpenDetail}
         >
           <div className="event-item__text">{data.title}</div>
