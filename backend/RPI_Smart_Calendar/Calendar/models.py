@@ -12,7 +12,7 @@ class Event(models.Model):
     # This is the choice indicating whether the event is added by synchronization or manually 
     class methods(models.TextChoices):
         sync = 'sync'
-        manually = 'man'
+        manual = 'manual'
     # This is the choice indicating whether the event is a block or line
     # line means the assignment is a assignment due
     # block means the schedule of the event
@@ -24,7 +24,7 @@ class Event(models.Model):
                              on_delete=models.CASCADE, default='')
     # title indicates the event tile if type == block
     # no need to set if the type == line
-    title = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=256, blank=True, null=True)
     # addTime indicates the time the event is added
     addTime = models.DateTimeField(auto_now_add=True)
     # startTime indicates when a event would start if type == block
@@ -35,12 +35,12 @@ class Event(models.Model):
     # or the due date of the assignment if type == line
     endTime = models.DateTimeField('end Time',  default=django.utils.timezone.now)
     # method indicates whether the event is added by synchronization or manually 
-    method = models.CharField(max_length=4, choices=methods.choices, default='sync')
+    method = models.CharField(max_length=32, choices=methods.choices, default='sync')
     # type indicates whether the event is a block or line
-    type = models.CharField(max_length=6, choices=types.choices)
+    type = models.CharField(max_length=32, choices=types.choices)
     # detail descriptions about the event if type == block
     # no need to set if type == line
-    details = models.CharField(max_length=200, blank=True, null=True)
+    details = models.CharField(max_length=1024, blank=True, null=True)
     # no need to set if type == block
     # actualTime indicates the actual time used by the user to finish the assignment if type == line
     # no need to set if unfinished if type == line

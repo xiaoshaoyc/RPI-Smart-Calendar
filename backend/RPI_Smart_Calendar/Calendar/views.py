@@ -94,6 +94,8 @@ class EventView(View):
         jevent['details'] = event.get_details()
         jevent['method'] = event.method
         jevent['title'] = event.get_title()
+        jevent['startTime'] = event.startTime
+        jevent['endTime'] = event.endTIme
         jevent['label'] = []
         try:
             jevent['label'].append(event.group.group_id)
@@ -214,10 +216,10 @@ class AddEvent(View):
         #save event
         if type=='block':
             event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
-                        method = 'manually', type = type, details = details)
+                        method = 'manual', type = type, details = details)
         else:
             event = Event(user = user, group = group, endTime = endTime,
-                        method = 'manually', type = type, details = details)
+                        method = 'manual', type = type, details = details)
         event.save()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
