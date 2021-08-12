@@ -5,8 +5,6 @@ WORKDIR /frontend
 RUN yarn install && yarn build
 
 FROM python:3.9.6
-EXPOSE 20001
-
 COPY ["backend/*", "/RPI_Smart_Calendar/"]
 
 WORKDIR /RPI_Smart_Calendar
