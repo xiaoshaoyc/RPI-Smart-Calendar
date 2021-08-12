@@ -1,7 +1,6 @@
 FROM python:3.9.6
 EXPOSE 20001
 
-COPY 
 COPY ["backend/*", "deploy/python/*", "/RPI_Smart_Calendar/"]
 
 WORKDIR /RPI_Smart_Calendar
