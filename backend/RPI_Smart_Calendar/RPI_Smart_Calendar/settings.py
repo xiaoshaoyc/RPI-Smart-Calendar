@@ -32,6 +32,8 @@ ALLOWED_HOSTS = [
     '*' if PRODUCTION else '127.0.0.1',
 ]
 
+if PRODUCTION:
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Application definition
 
@@ -101,9 +103,9 @@ if PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'django_db',
-            'USER': 'django',
-            'PASSWORD': '12345678',
+            'NAME': os.getenv("POSTGRES_DB"),
+            'USER': os.getenv("POSTGRES_USER"),
+            'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
             'HOST': 'db',
             'PORT': '5432',
         }
