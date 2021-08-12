@@ -14,6 +14,8 @@ services:
     restart: always
     depends_on:
       - app
+    environment:
+      - SERVER_NAME
 
   app:
     build:
