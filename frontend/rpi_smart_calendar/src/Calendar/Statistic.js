@@ -1,7 +1,9 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar } from 'recharts';
-import './Statistic.css'
+import './Statistic.css';
+import Config from '../Config';
+import { getRandomColor } from '../Util';
 
 const data = [
   {
@@ -42,18 +44,26 @@ class Statistic extends React.PureComponent {
     super(props);
     this.state = {
       curIndex: 0,
-      data: null,
+      data: data,
+      data2: data2,
     }
+    this.getData();
   }
 
   drawChart1() {
+    let HTMLChunk = [];
+    for (let course in this.state.data[0]) {
+      if (course !== "name") {
+        HTMLChunk.push(<Line type="monotone" dataKey={course} stroke={getRandomColor()} />);
+      }      
+    }
     return (
       <div className="pred-chart" onClick={() => this.handleClick()}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             // width={500}
             // height={300} TODO
-            data={data}
+            data={this.state.data}
             margin={{
               top: 5,
               right: 30,
@@ -66,10 +76,11 @@ class Statistic extends React.PureComponent {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="CSCI 1200" stroke="#b9bf0a" />
+            {HTMLChunk}
+            {/* <Line type="monotone" dataKey="CSCI 1200" stroke="#b9bf0a" />
             <Line type="monotone" dataKey="CSCI 4963" stroke="#e31021" />
             <Line type="monotone" dataKey="CSCI 4210" stroke="#4021db" />
-            <Line type="monotone" dataKey="CSCI 4440" stroke="#32a852" />
+            <Line type="monotone" dataKey="CSCI 4440" stroke="#32a852" /> */}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -77,13 +88,19 @@ class Statistic extends React.PureComponent {
   }
 
   drawChart2() {
+    let HTMLChunk = [];
+    for (let course in this.state.data[0]) {
+      if (course !== "name") {
+        HTMLChunk.push(<Bar dataKey={course} fill={getRandomColor()} />);
+      }      
+    }
     return (
       <div className="pred-chart" onClick={() => this.handleClick()}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             // width={500}
             // height={300} TODO
-            data={data2}
+            data={this.state.data2}
             margin={{
               top: 5,
               right: 30,
@@ -96,10 +113,11 @@ class Statistic extends React.PureComponent {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="CSCI 1200" fill="#b9bf0a" />
+            {HTMLChunk}
+            {/* <Bar dataKey="CSCI 1200" fill="#b9bf0a" />
             <Bar dataKey="CSCI 4963" fill="#e31021" />
             <Bar dataKey="CSCI 4210" fill="#4021db" />
-            <Bar dataKey="CSCI 4440" fill="#32a852" />
+            <Bar dataKey="CSCI 4440" fill="#32a852" /> */}
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -107,14 +125,17 @@ class Statistic extends React.PureComponent {
   }
 
   getData() {
-    // TODO: delete
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
-    xhr2.withCredentials = true;
-    xhr2.send();
+    if (Config.DEBUG_ALWAYS_LOGIN) {
+      // TODO: delete
+      let xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
+      xhr2.withCredentials = true;
+      xhr2.send();
+    }
+    
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://127.0.0.1:8000/calendar/week/");
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/analysis/`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -138,10 +159,37 @@ class Statistic extends React.PureComponent {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
+
+      let data = resJson.data;
+
+      let lastWeekCourseCost = {name: "Last Week"};
+      let thisWeekCourseCost = {name: "This Week"};
+      let nextWeekCourseCost = {name: "Next Week"};
+      let avgCourseCost = {name: "average time need each week"};
+
+      for (let courses of data) {
+        for (let courseName in courses) {
+          lastWeekCourseCost[courseName] = courses[courseName].last_time;
+          thisWeekCourseCost[courseName] = courses[courseName].this_time;
+          nextWeekCourseCost[courseName] = courses[courseName].next_time;
+          avgCourseCost[courseName] = courses[courseName].avg_time;
+        }
+      }
+
+      let chartData = [
+        lastWeekCourseCost,
+        thisWeekCourseCost,
+        nextWeekCourseCost,
+      ];
+      let chartData2 = [avgCourseCost];
+      this.setState({
+        data: chartData,
+        data2: chartData2,
+      });
     }
   }
 
@@ -150,6 +198,7 @@ class Statistic extends React.PureComponent {
     let index = this.state.curIndex;
     index++;
     this.setState({curIndex: index});
+    this.getData();
   }
 
   render() {

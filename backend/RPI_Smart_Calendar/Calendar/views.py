@@ -94,6 +94,8 @@ class EventView(View):
         jevent['details'] = event.get_details()
         jevent['method'] = event.method
         jevent['title'] = event.get_title()
+        jevent['startTime'] = event.startTime
+        jevent['endTime'] = event.endTime
         jevent['label'] = []
         try:
             jevent['label'].append(event.group.group_id)
@@ -102,6 +104,7 @@ class EventView(View):
         jevent["isSuccess"] = True
         jevent["Message"] = 'SUCCESS'
         return JsonResponse(status=200, data = jevent, safe=False)
+
 # the function would return the avergae time of the event set
 def cal_time(events_week):
     week_time = 0
@@ -113,6 +116,7 @@ def cal_time(events_week):
         return 0
     else:
         return week_time/count
+
 # the class return a analysis of current week if login
 # return fail message if not login
 class CurAnalysisView(View):
@@ -120,6 +124,7 @@ class CurAnalysisView(View):
         year_num = date.today().isocalendar()[0]
         week_num = date.today().isocalendar()[1]
         return AnalysisView.get(self,request, year_num, week_num)
+        
 # the class returns analysis of the specified week
 # return fail message if not login
 # return fail message if week not exist
@@ -162,6 +167,7 @@ class AnalysisView(View):
             courseinfo['last_time'] = cal_time(events_last_week)
             courseinfo['this_time'] = cal_time(events_this_week)
             courseinfo['next_time'] = cal_time(events_next_week)
+
         return JsonResponse(status=200, data = output, safe=False)
 
 # the class add a event for the current user
@@ -170,43 +176,28 @@ class AnalysisView(View):
 # return fail message if not login
 @method_decorator(csrf_exempt, name='dispatch')
 class AddEvent(View):
-    def get(self, request):
+    def post(self, request):
         # get the input
-        logger = logging.getLogger(__name__)
-        groupid = None
-        title = None
-        # details = request.POST["details"] 
-        details = 'test details' 
-        startTime = ''
-        endTime = None
-        #type = request.POST["type"]
-        type = 'line'
+        title = request.POST["title"]
+        details = request.POST["details"]
+        startTime = request.POST["startTime"]
+        endTime = request.POST["endTime"]
+        type = request.POST["type"]
+        groupid = request.POST["groupid"]
         output = {}
-        if type=='block':
-        #     title = request.POST["title"]
-        #     startTime = request.POST["startTime"]
-            title = "SDD MEETING3"
-            startTime = str(timezone.now())
-        elif type=='line':
-            # groupid = request.POST["groupid"]
-            groupid = 'MATH4090'
-        else:
+        if type not in ['block', 'line']:
             output["isSuccess"] = False
             output["Message"] = 'FAIL: WRONG TYPE'
-            return JsonResponse(status=401, data = output, safe=False)
-        # endTime = request.POST["endTime"]
-        endTime = str(timezone.now())
+            return JsonResponse(status=400, data = output, safe=False)
         #calculate time
-        logger.error(startTime)
         try:
             startTime = dateutil.parser.parse(startTime, ignoretz=True)
+            endTime = dateutil.parser.parse(endTime, ignoretz=True)
         except:
-            pass
-        endTime = dateutil.parser.parse(endTime, ignoretz=True)
-        logger.error(startTime) 
+            return JsonResponse(status=500, data={})
         # get user
         user_id = request.session.get('user_id', None)
-        if user_id:
+        if user_id is not None:
             user = User.objects.get(id=user_id)
         # user not exist
         else:
@@ -221,18 +212,18 @@ class AddEvent(View):
             except:
                 output["isSuccess"] = False
                 output["Message"] = 'FAIL: USER IS NOT IN THE GROUP'
-                return JsonResponse(status=401, data = output, safe=False)
+                return JsonResponse(status=401, data=output, safe=False)
         #save event
-        if type=='block':
-            event = Event(user = user, title = title, startTime = startTime, endTime = endTime,
-                        method = 'manually', type = type, details = details)
-        else:
-            event = Event(user = user, group = group, endTime = endTime,
-                        method = 'manually', type = type, details = details)
+        # if type=='block':
+        #     event = Event(user=user, title=title, startTime=startTime, endTime=endTime,
+        #                 method='manual', type=type, details=details, group=group)
+        # else:
+        event = Event(user=user, title=title, startTime=startTime, endTime=endTime,
+                    method='manual', type=type, details=details, group=group)
         event.save()
         output["isSuccess"] = True
         output["Message"] = 'SUCESS'
-        return JsonResponse(status=200, data = output, safe=False)
+        return JsonResponse(status=200, data=output, safe=False)
 
 # the class edit a event for the current user
 # need to pass in title, detail, startTime, and endTime of the event

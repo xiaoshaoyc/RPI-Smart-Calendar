@@ -7,7 +7,6 @@ import Detail from './Detail';
 import Grid from './Grid';
 import GridHead from './GridHead';
 import EventFrom from './EventForm';
-import {getWeek} from '../Util';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -23,7 +22,7 @@ class Calendar extends React.Component {
 
     this.state = {
       labelList,
-      curEventId: 99999999,
+      curEventId: null,
       date,
       showEventForm: false,
       eventList: [],
@@ -70,16 +69,12 @@ class Calendar extends React.Component {
     this.setState({eventList: newEventList});
   }
 
-  updatePage() {
-    this.forceUpdate();
-  }
-
   render() {
     let formHTML = null;
     if (this.state.showEventForm) {
       formHTML = (
         <div className="eventForm">
-          <EventFrom closeFn={() => this.hideEventForm()} addFn={(x) => this.addEvent(x)} updatePage={() => this.updatePage()}/>
+          <EventFrom closeFn={() => this.hideEventForm()} addFn={(x) => this.addEvent(x)}/>
         </div>
       );
     }

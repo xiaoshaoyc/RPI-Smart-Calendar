@@ -15,8 +15,8 @@ class EventBlock extends React.Component {
     dateOrigin.setHours(0, 0, 0, 0);
     let top = (startTime.getTime() - dateOrigin.getTime()) / oneDay * 100;
     let bottom = 100 - (endTime.getTime() - dateOrigin.getTime()) / oneDay * 100;  // TODO: assuming in one day for now
-    let left = startTime.getDay() / 7 * 100;
-    let right = 100 - (startTime.getDay() + 1) / 7 * 100;
+    let left = ((startTime.getDay() + 6) % 7) / 7 * 100;
+    let right = 100 - (((startTime.getDay() + 6) % 7) + 1) / 7 * 100;
     if (data.eventType === "block") {
       return (
         <div 
@@ -32,7 +32,7 @@ class EventBlock extends React.Component {
       return (
         <div 
           className="event-item event-item__line" 
-          style={{inset:`${top-0.5}% ${right}% ${bottom-0.5}% ${left}%`}}
+          style={{inset:`${top-0.5}% ${right}% ${100-top-0.7}% ${left}%`}}
           onClick={this.props.onOpenDetail}
         >
           <div className="event-item__text">{data.title}</div>

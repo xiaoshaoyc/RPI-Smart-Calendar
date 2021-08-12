@@ -1,12 +1,15 @@
 version: "3.9"
 services:
   web:
-    image: nginx:1.21.0
-    volumes:
-      - ../frontend/rpi_smart_calendar/build:/usr/share/nginx/html:ro
-      - ./nginx/templates:/etc/nginx/templates
+    build:
+      context: ..
+      dockerfile: deploy/frontend/Dockerfile
+    # image: nginx:1.21.0
+    # volumes:
+    #   - ../frontend/rpi_smart_calendar/build:/usr/share/nginx/html:ro
+    #   - ./nginx/templates:/etc/nginx/templates
     ports:
-      - "20000:80"
+      - "80:80"
       # - "443:443"
     restart: always
     depends_on:
@@ -20,9 +23,13 @@ services:
       - "20001"
     environment:
       - PRODUCTION=true
-      - SUPERUSER_NAME=TimeMaster
-      - SUPERUSER_EMAIL=Not@implement.yet
-      - SUPERUSER_PASSWD=12345678
+      - SECRET_KEY
+      - SUPERUSER_NAME
+      - SUPERUSER_EMAIL
+      - SUPERUSER_PASSWD
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     restart: always
     depends_on:
       - db
@@ -37,8 +44,8 @@ services:
       - "5432"
     restart: always
     environment:
-      - POSTGRES_USER=django
-      - POSTGRES_PASSWORD=12345678
-      - POSTGRES_DB=django_db
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
       - PGDATA=/var/lib/postgresql/data/pgdata
 

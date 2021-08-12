@@ -1,7 +1,8 @@
 import React from 'react';
 import EventBlock from './EventBlock';
 import './Grid.css';
-import {getWeek} from '../Util'
+import {getWeek, parseDate} from '../Util';
+import Config from '../Config';
 
 class Grid extends React.Component {
   constructor(props) {
@@ -14,16 +15,18 @@ class Grid extends React.Component {
     this.getEventList();
   }
   getEventList() {
-    // TODO: delete
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
-    xhr2.withCredentials = true;
-    xhr2.send();
-
+    if (Config.DEBUG_ALWAYS_LOGIN) {
+      // TODO: delete
+      let xhr2 = new XMLHttpRequest();
+      xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
+      xhr2.withCredentials = true;
+      xhr2.send();
+    }
+   
     let curDate = this.props.curDate;
     console.log(`CurWeek: ${getWeek(curDate)}`);
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/week/${curDate.getFullYear()}/${getWeek(curDate)}`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/week/${curDate.getFullYear()}/${getWeek(curDate)}`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -47,21 +50,24 @@ class Grid extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
 
       let data = resJson.data;
-      console.log(data);
+      let temp = data.shift();
+      console.log(temp);
+      data.push(temp);
+      console.log(data); // TODO
       let eventList = [];
       for (let dayEventList of data) {
         for (let event of dayEventList) {
           let e = {
             eventType: event.eventType,
             title: event.title,
-            startTime: new Date(Date.parse(event.startTime.slice(0, -1) + ".000" + event.startTime.slice(-1))),
-            endTime: new Date(Date.parse(event.endTime.slice(0, -1) + ".000" + event.endTime.slice(-1))),
+            startTime: parseDate(event.startTime),
+            endTime: parseDate(event.endTime),
             id: event.id,
           }
           eventList.push(e);
@@ -72,7 +78,7 @@ class Grid extends React.Component {
   }
 
   render() {
-    if (this.props.curDate.valueOf() != this.state.curDate.valueOf()) {
+    if (this.props.curDate.valueOf() !== this.state.curDate.valueOf()) {
       this.getEventList();
       this.setState({curDate: this.props.curDate});
     }
@@ -101,12 +107,14 @@ class Grid extends React.Component {
         <EventBlock key={event.id} data={event} onOpenDetail={() => this.props.handleOpenDetail(event.id)} />
       );
     }
-    eventHTML.push(
-      <EventBlock key={test1.id} data={test1} onOpenDetail={() => this.props.handleOpenDetail(test1.id)} />
-    );
-    eventHTML.push(
-      <EventBlock key={test2.id} data={test2} onOpenDetail={() => this.props.handleOpenDetail(test2.id)} />
-    );
+    if (Config.DEBUG_TEST_DATA) {
+      eventHTML.push(
+        <EventBlock key={test1.id} data={test1} onOpenDetail={() => this.props.handleOpenDetail(test1.id)} />
+      );
+      eventHTML.push(
+        <EventBlock key={test2.id} data={test2} onOpenDetail={() => this.props.handleOpenDetail(test2.id)} />
+      );
+    }
     let rows = [];
     for (let i = 0; i < 24; i++) {
       rows.push(i/24*100);

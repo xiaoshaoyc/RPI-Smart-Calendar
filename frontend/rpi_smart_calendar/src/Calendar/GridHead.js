@@ -1,6 +1,6 @@
 import React from 'react';
 import './GridHead.css';
-import {getWeek} from '../Util'
+import {getWeek} from '../Util';
 
 class GridHead extends React.Component {
 
