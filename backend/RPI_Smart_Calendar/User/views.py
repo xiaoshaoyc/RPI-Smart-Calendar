@@ -44,7 +44,22 @@ class Authenticate(View):
             output["message"] = "ERROR: LOGIN FAILURE, USER DOES NOT EXSIST"
             output["auth"] = False
         return JsonResponse(status=500, data = output, safe=False)
-
+class Current(View):
+    def get(self, request):
+        output={}
+        # try to get the user within the database
+        try:
+            userid = request.session['user_id']
+            user = User.objects.get(id=userid)
+            output["data"] = user.username
+            output["message"] = "SUCCESS"
+            output["auth"] = True
+        # invalid username
+        except:
+            output["data"] = ""
+            output["message"] = "ERROR: USER NOT LOGIN"
+            output["auth"] = False
+        return JsonResponse(status=500, data = output, safe=False)
 
 # uncomment later
 # # register the user
