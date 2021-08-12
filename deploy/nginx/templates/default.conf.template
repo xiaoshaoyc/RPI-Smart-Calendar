@@ -8,6 +8,11 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   }
+  location ~ ^/static/admin/ {
+    proxy_pass http://app:20001;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
 
   location ~ ^(/|/index.html)$ {
     root /usr/share/nginx/html;
