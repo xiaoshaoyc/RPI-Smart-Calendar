@@ -1,6 +1,6 @@
 server {
   listen 80;
-  server_name test.sycnb.online;
+  server_name ${SERVER_NAME};
   access_log  /var/log/nginx/forum_access_log;
 
   location / {

@@ -1,5 +1,7 @@
-import React from 'react'
-import './Detail.css'
+import React from 'react';
+import './Detail.css';
+import Config from '../Config';
+import { parseDate } from '../Util';
 
 var DAY_TO_WEEK = [
   "Sunday"
@@ -37,7 +39,6 @@ class Detail extends React.Component {
       endTime: null,
       Deatils: null,
       addTime: null,
-      method: null,
       eventType: null,
       estTime: null,
       id: props.eventId,
@@ -48,20 +49,23 @@ class Detail extends React.Component {
   }
 
   getDetails() {
+    if (this.props.eventId === null) {
+      return;
+    }
     // TODO: delete
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    if (Config.DEBUG_ALWAYS_LOGIN) {
+      let xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
     xhr2.withCredentials = true;
     xhr2.send();
+    }
 
     let id = this.props.eventId;
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/event/${id}`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/event/${id}`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
-    // TODO: delete
-    // xhr.withCredentials = true;
 
     xhr.send();
     
@@ -80,19 +84,17 @@ class Detail extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
-
       this.setState({
           title: resJson.title,
-          startTime: new Date(),
-          endTime: new Date(),
+          startTime: parseDate(resJson.startTime),
+          endTime: parseDate(resJson.endTime),
           details: resJson.details,
           addTime: new Date(),
-          method: resJson.mothod, // TODO: maybe need better variable name
-          eventType: resJson.devetType,
+          eventType: resJson.eventType,
           estTime: 80,  // unit is minute for now
       });
       this.setState({isSet: true});
@@ -101,12 +103,12 @@ class Detail extends React.Component {
 
   handleDelete() {
     let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", "http://127.0.0.1:8000/login/auth/");
+    xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
     xhr2.withCredentials = true;
     xhr2.send();
 
     let xhr = new XMLHttpRequest();
-    xhr.open("GET", `http://127.0.0.1:8000/calendar/event/${this.state.id}/delete`);
+    xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/event/${this.state.id}/delete`);
     xhr.withCredentials = true;
     xhr.timeout = 10000;
     xhr.responseType = 'json';
@@ -127,38 +129,52 @@ class Detail extends React.Component {
         return;
       }
       
-      if (resJson.isSuccess == false) {
+      if (resJson.isSuccess === false) {
         alert("need login");
         return;
       }
 
       // TODO: flush the page
+      window.location.reload();
     }
   }
 
   render() {
-    if (this.props.eventId === null) {
+    if (Config.DEBUG_TEST_DATA === true) this.state.isSet = true; // TODO: delete this hack
+    if (this.props.eventId === null || this.state.isSet === false) {
       return (
         <div className="detail"></div>
       );
     }
     let formatter = new Intl.DateTimeFormat("en-US",{
-      hour: 'numeric'
-      , minute: 'numeric'
+      hour: 'numeric',
+      minute: 'numeric'
     });
-    let title = "CSCI 4963";
-    let startTime = new Date();
-    let endTime = new Date(startTime.getTime() + 2*60*60*1000);
-    let details = `Meets with Mav to talk about Spring 3 deliverable.`;
-    let addTime = new Date(0);
-    let method = "manual"; // TODO: maybe need better variable name
-    let eventType = "event";
-    let estTime = 80;  // unit is minute for now
-    if (this.props.eventId === 999) {
-      title = "CSCI 4210";
-      method = "sync";
-      estTime = 10;
-      eventType = "deadline";
+    let formatter2 = new Intl.DateTimeFormat("en-US",{
+      hour12: true,
+      hour: 'numeric',
+      minute: 'numeric',
+      year: '2-digit',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    let title, startTime, endTime, details, addTime, method, eventType, estTime;
+    if (Config.DEBUG_TEST_DATA) {
+      title = "CSCI 4963";
+      startTime = new Date();
+      endTime = new Date(startTime.getTime() + 2*60*60*1000);
+      details = `Meets with Mav to talk about Spring 3 deliverable.`;
+      addTime = new Date(0);
+      method = "manual"; // TODO: maybe need better variable name
+      eventType = "event";
+      estTime = 80;  // unit is minute for now
+      if (this.props.eventId === 999 && Config.DEBUG_TEST_DATA === true) {
+        title = "CSCI 4210";
+        method = "sync";
+        estTime = 10;
+        eventType = "line";
+      }
     }
     if (this.state.isSet) {
       title = this.state.title;
@@ -166,7 +182,6 @@ class Detail extends React.Component {
       endTime = this.state.endTime;
       details = this.state.details;
       addTime = this.state.addTime;
-      method = this.state.method;
       eventType = this.state.eventType;
       estTime = this.state.estTime;
     }
@@ -179,11 +194,10 @@ class Detail extends React.Component {
         <div className="detail-content">
           <div>Title: {title}</div>
           <div>{startTime.getMonth()}/{startTime.getDate()} ({DAY_TO_WEEK[startTime.getDay()]})</div>
-          <div>{startTime.toString()} - {endTime.toString()}</div>
+          <div>FROM {formatter2.format(startTime)} TO {formatter2.format(endTime)}</div>
           <br/>
           <div>Details: {details}</div>
-          <div>Add time: {addTime.toUTCString()}</div>
-          <div>Add method: {method}</div>
+          {/* <div>Add time: {addTime.toUTCString()}</div> */}
           <div>Type: {eventType}</div>
           <div>Est. Time: {formatMinute(estTime)}</div>
         </div>
