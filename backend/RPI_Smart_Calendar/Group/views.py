@@ -31,17 +31,16 @@ class DisplayCourses(View):
 # return fail message if group not exist
 class ReceiveMessage(View):
     def get(self,request,group_id):
-        # username = request.POST["username"]
         # text = request.POST["text"]
         output = {}
-        username = 'harry123'
-        text = 'Hello everyboday!'
+        user_id = request.session.get('user_id', None)
+        text = 'Hello 123'
         #get user
         try:
-            user = User.objects.get(username = username)
+            user = User.objects.get(id=user_id)
         except:
             output["isSuccess"] = False
-            output["Messgae"] = 'FAIL: USER NOT EXIST'
+            output["Messgae"] = 'FAIL: USER NOT LOGIN'
             return JsonResponse(status=500, data = output, safe=False)
         #get the group
         try:
