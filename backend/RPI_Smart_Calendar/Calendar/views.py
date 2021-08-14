@@ -185,6 +185,10 @@ class AddEvent(View):
         type = request.POST["type"]
         groupid = request.POST["groupid"]
         actualTime = request.POST["actualTime"]
+        try:
+            actualTime = int(actualTime)
+        except:
+            actualTime = 0
         output = {}
         if type not in ['block', 'line']:
             output["isSuccess"] = False
