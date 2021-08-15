@@ -51,7 +51,7 @@ class Event(models.Model):
     # calculate the estimate time of the assignment using machine learning model
     def calculate_estTime(self):
         #get all dues with actualTime
-        events = Event.objects.filter(type = 'line',actualTime__isnull=False)
+        events = Event.objects.filter(type = 'line',actualTime__gt=0)
         if len(events)==0:
             return 0
         X = []
@@ -93,7 +93,7 @@ class Event(models.Model):
             return (self.endTime-self.startTime).seconds
         #if due
         else:
-            if self.actualTime:
+            if self.actualTime>0:
                 return self.actualTime
             else:
                 return self.calculate_estTime()
