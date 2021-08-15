@@ -17,4 +17,9 @@ server {
   location ^~ /static/ {
     root /usr/share/nginx/html;
   }
+
+  location ^~ /groupPage/ {
+    root /usr/share/nginx/html;
+    index chat.html;
+  }
 }

@@ -15,3 +15,4 @@ FROM nginx:1.21.0
 COPY deploy/nginx/templates /etc/nginx/templates
 COPY --from=0 /frontend/build /usr/share/nginx/html
 COPY --from=1 /django-static /usr/share/nginx/html/static
+COPY frontend/rpi_smart_calendar/src/Group/groupPage /usr/share/nginx/html/groupPage
