@@ -1,0 +1,176 @@
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.msg-container{
+    margin-top:10px;
+    height:90%;
+    width:80%; 
+    float: right;
+    padding: 30px 30px 30px 30px;
+    border: 1px solid #c4c4c4;
+/*    clear: both;*/
+    overflow: hidden;
+
+}
+.messages {
+  height: 85%;
+  overflow-y: auto;
+}
+.messages::-webkit-scrollbar {
+    display: none;
+}
+.msg{ 
+  overflow:hidden; 
+  margin:26px 0 26px;
+}
+
+img{ max-width:100%;}
+.left_img {
+  display: inline-block;
+  width: 6%;
+}
+.right_img{
+    display: inline-block;
+    width: 6%;
+    float: right;
+    margin-left: 20px;
+}
+
+.received_msg {
+  display: inline-block;
+  padding: 0 0 0 10px;
+  vertical-align: top;
+ }
+ .received_msg p {
+  background: #ebebeb ;
+  border-radius: 3px;
+  color: #646464;
+  font-size: 14px;
+  margin: 0;
+  padding: 5px 10px 5px 12px;
+}
+.time_left {
+  color: #666666;
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+.time_right {
+  color: #666666;
+  display: block;
+  font-size: 12px;
+  margin: 8px 0 0;
+}
+
+ .sent_msg p {
+  background: #05728f;
+  min-height: 30px;
+  border-radius: 3px;
+  font-size: 14px;
+  margin: 0; 
+  color:#fff;
+  padding: 5px 10px 5px 12px;
+  float:right;
+  display:block;
+}
+.sent_msg {
+  float: right;
+  display: inline-block;
+  padding: 0 0 0 10px;
+  vertical-align: top;
+}
+.input input {
+  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  border: medium none;
+  color: #4c4c4c;
+  font-size: 15px;
+  min-height: 48px;
+  width: 100%;
+  position:relative;
+}
+
+.input {
+    border-top: 1px solid #c4c4c4;
+    position: relative;
+}
+.send_btn {
+  position: absolute;
+  right: 0;
+  top: 10px;
+}
+
+.nav {
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ff0000;
+  height: 50px;
+  width: 100%;
+}
+
+.group_container {
+margin-top:10px;
+  background: #f8f8f8 none repeat scroll 0 0;
+  /*margin:0px;*/
+  float: left;
+  overflow: hidden;
+  width: 20%; 
+  height:90%;
+    border: 1px solid #c4c4c4;
+  overflow: hidden;
+}
+.top_spac{ margin: 20px 0 0;}
+
+
+.recent_heading {
+    float: left; 
+    width:20%;}
+
+.heading{ 
+    padding:10px 29px 10px 20px; 
+    overflow:hidden; 
+    border-bottom:1px 
+    solid #c4c4c4;
+    color: #05728f;
+    font-size: 21px;
+    margin: auto;
+    }
+
+
+.group {
+  /*border-bottom: 1px solid #c4c4c4;*/
+  margin: 0;
+  padding: 18px 16px 10px;
+  width:100%;
+}
+
+/*.active{ background:#ebebeb;}*/
+/*.active, .group:hover {
+  background-color: #ebebeb;
+}*/
+
+.group {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.active, .group:hover {
+  background-color: #666;
+  color: white;
+}
+
+input {border:0;outline:0;}
+
+.group-return-calendar__btn {
+  position: fixed;
+  top: 15px;
+  left: 30px;
+}

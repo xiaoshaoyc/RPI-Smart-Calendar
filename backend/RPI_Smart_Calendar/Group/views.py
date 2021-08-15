@@ -30,11 +30,10 @@ class DisplayCourses(View):
 # return fail message if not login
 # return fail message if group not exist
 class ReceiveMessage(View):
-    def get(self,request,group_id):
-        # text = request.POST["text"]
+    def post(self,request,group_id):
         output = {}
         user_id = request.session.get('user_id', None)
-        text = 'Hello 123'
+        text = request.POST["text"]
         #get user
         try:
             user = User.objects.get(id=user_id)

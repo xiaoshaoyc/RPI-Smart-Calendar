@@ -85,7 +85,7 @@ class Nav extends React.Component {
   }
 
   handleGroup() {
-    window.location.replace("/group/");
+    window.location.replace("/groupPage/chat.html");
   }
 
   render() {
