@@ -44,7 +44,7 @@ class Event(models.Model):
     # no need to set if type == block
     # actualTime indicates the actual time used by the user to finish the assignment if type == line
     # no need to set if unfinished if type == line
-    actualTime = models.IntegerField(null=True,blank=True)
+    actualTime = models.IntegerField(blank=True, default=0)
     # no need to set if type == block
     # group indicates the course of the assignment if type == line
     group = models.ForeignKey(MyGroup, on_delete=models.CASCADE, blank=True, null=True)

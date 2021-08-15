@@ -1,6 +1,22 @@
-.cal-grid__head {
+.cal-grid__navi {
   display: flex;
   justify-content: space-around;
+  background-color: gainsboro;
+  margin: 0 30px 10px 30px;
+}
+
+.cal-grid__date {
+  display: flex;
+  justify-content: space-around;
+  flex-grow: 1;
+}
+
+.cal-grid__date-item--empty {
+  width: 50px;
+}
+
+.cal-grid__date-warp {
+  display: flex;
 }
 
 .cal-grid__btn {

@@ -80,12 +80,20 @@ class Nav extends React.Component {
 
   }
 
+  handleReg() {
+    window.location.replace("/login/register/");
+  }
+
+  handleGroup() {
+    window.location.replace("/group/");
+  }
+
   render() {
     let loginMessage = "";
     if (this.state.isLogin) {
-      loginMessage = "Login out";
+      loginMessage = "Logout";
     } else {
-      loginMessage = "Login in";
+      loginMessage = "Login";
     }
     let HTML = null;
     if (this.state.showLoginForm) {
@@ -94,11 +102,14 @@ class Nav extends React.Component {
 
     return (
       <div className="nav">
-        <button className="nav-item nav-item1">X</button>
+        <button className="nav-item nav-item1" onClick={() => this.handleGroup()}>Group Chat</button>
         <span className="nav-item nav-item2"><b>RPI Smart Calendar</b></span>
         <img className="nav-item nav-item3" src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg" alt="user-img" />
         <span className="nav-item nav-item4">{this.state.username}</span>
-        <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()} disabled={this.state.disableLogin}>{loginMessage}</button>
+        <div>
+          <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()} disabled={this.state.disableLogin}>{loginMessage}</button>
+          <button className="nav-item nav-item6" onClick={() => this.handleReg()} >Register</button>
+        </div>
         {HTML}
       </div>
     )

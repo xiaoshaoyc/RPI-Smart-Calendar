@@ -13,11 +13,13 @@ var DAY_TO_WEEK = [
   , "Saturday"
 ];
 
-function formatMinute(minute) {
-  let hours = Math.floor(minute / 60);
-  let minutes = minute % 60;
+function formatMinute(second) {
+  let seconds = second % 60;
+  let minutes = Math.floor(second / 60) % 60;
+  let hours = Math.floor(second / (60*60));
   let hourUnit = hours === 1 ? "hour" : "hours";
-  let minuteUnit = minute === 1 ? "min" : "mins";
+  let minuteUnit = minutes === 1 ? "min" : "mins";
+  let secondUnit = seconds === 1 ? "sec" : "sec";
 
   let returnStr = "";
   if (hours !== 0) {
@@ -25,6 +27,13 @@ function formatMinute(minute) {
   }
   if (minutes !== 0) {
     returnStr += ` ${minutes} ${minuteUnit}`;
+  }
+  if (seconds !== 0) {
+    returnStr +=  `${seconds} ${secondUnit}`;
+  }
+
+  if (returnStr === "") {
+    returnStr = "data not available";
   }
   return returnStr;
 }
@@ -95,18 +104,13 @@ class Detail extends React.Component {
           details: resJson.details,
           addTime: new Date(),
           eventType: resJson.eventType,
-          estTime: 80,  // unit is minute for now
+          estTime: resJson.estTime,  // unit is minute for now
       });
       this.setState({isSet: true});
     }
   }
 
   handleDelete() {
-    let xhr2 = new XMLHttpRequest();
-    xhr2.open("GET", `http://${Config.BACKEND_URL}/login/auth/`);
-    xhr2.withCredentials = true;
-    xhr2.send();
-
     let xhr = new XMLHttpRequest();
     xhr.open("GET", `http://${Config.BACKEND_URL}/calendar/event/${this.state.id}/delete`);
     xhr.withCredentials = true;
@@ -201,7 +205,8 @@ class Detail extends React.Component {
           <div>Type: {eventType}</div>
           <div>Est. Time: {formatMinute(estTime)}</div>
         </div>
-        <div className="deatil-actions">
+        <div className="detail-actions">
+          <button onClick={() => this.props.onEdit(this.state.id)}>Edit</button>
           <button onClick={() => this.handleDelete()}>Delete</button>
         </div>
       </div>

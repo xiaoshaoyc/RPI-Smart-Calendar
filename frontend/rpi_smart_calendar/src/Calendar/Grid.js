@@ -86,21 +86,6 @@ class Grid extends React.Component {
     let c1 = "#91918c";
     let c2 = "#d6d6c3";
 
-    let d = new Date();
-    let test1 = {};
-    test1.eventType = "block";
-    test1.title = "CSCI 4963";
-    test1.startTime = new Date(d.getTime());
-    test1.endTime = new Date(d.getTime() + 2*60*60*1000);
-    test1.id = 666;
-
-    let test2 = {};
-    test2.eventType = "line";
-    test2.title = "CSCI 4210";
-    test2.startTime = new Date(d.getTime() + 7*60*60*1000);
-    test2.endTime = new Date(d.getTime() + 7*60*60*1000);
-    test2.id = 999;
-    
     let eventHTML = [];
     for (let event of this.state.eventList) {
       eventHTML.push(
@@ -108,6 +93,22 @@ class Grid extends React.Component {
       );
     }
     if (Config.DEBUG_TEST_DATA) {
+      // Test Data
+      let d = new Date();
+      let test1 = {};
+      test1.eventType = "block";
+      test1.title = "CSCI 4963";
+      test1.startTime = new Date(d.getTime());
+      test1.endTime = new Date(d.getTime() + 2*60*60*1000);
+      test1.id = 666;
+  
+      let test2 = {};
+      test2.eventType = "line";
+      test2.title = "CSCI 4210";
+      test2.startTime = new Date(d.getTime() + 7*60*60*1000);
+      test2.endTime = new Date(d.getTime() + 7*60*60*1000);
+      test2.id = 999;
+
       eventHTML.push(
         <EventBlock key={test1.id} data={test1} onOpenDetail={() => this.props.handleOpenDetail(test1.id)} />
       );

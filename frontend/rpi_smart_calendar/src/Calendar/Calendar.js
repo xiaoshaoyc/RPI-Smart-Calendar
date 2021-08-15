@@ -24,7 +24,7 @@ class Calendar extends React.Component {
       labelList,
       curEventId: null,
       date,
-      showEventForm: false,
+      eventFormHTML: null,
       eventList: [],
     };
   }
@@ -56,11 +56,21 @@ class Calendar extends React.Component {
   }
 
   showEventForm() {
-    this.setState({showEventForm: true});
+    let formHTML = (
+      <div className="eventForm">
+        <EventFrom
+          closeFn={() => this.hideEventForm()}
+          addFn={(x) => this.addEvent(x)}
+          isEdit={false}
+          eventId={null}
+        />
+      </div>
+    );
+    this.setState({eventFormHTML: formHTML});
   }
 
   hideEventForm() {
-    this.setState({showEventForm: false});
+    this.setState({eventFormHTML: null});
   }
 
   addEvent(event) {
@@ -69,20 +79,27 @@ class Calendar extends React.Component {
     this.setState({eventList: newEventList});
   }
 
+  handleEdit(eventId) {
+    let formHTML = (
+      <div className="eventForm">
+        <EventFrom
+          closeFn={() => this.hideEventForm()}
+          addFn={(x) => this.addEvent(x)}
+          isEdit={true}
+          eventId={eventId}
+        />
+      </div>
+    );
+    this.setState({eventFormHTML: formHTML});
+  }
+
   render() {
-    let formHTML = null;
-    if (this.state.showEventForm) {
-      formHTML = (
-        <div className="eventForm">
-          <EventFrom closeFn={() => this.hideEventForm()} addFn={(x) => this.addEvent(x)}/>
-        </div>
-      );
-    }
+    let formHTML = this.state.eventFormHTML;
 
     return (
       <div className="container">
         <div className="left-content">
-          <Filter labelList={this.state.labelList} onFilterBtn={(label) => this.handleFilterBtn(label)} />
+          {/* <Filter labelList={this.state.labelList} onFilterBtn={(label) => this.handleFilterBtn(label)} /> */}
           <Statistic />
         </div>
         <div className="main-content">
@@ -90,7 +107,12 @@ class Calendar extends React.Component {
           <Grid curDate={this.state.date} handleOpenDetail={(x) => this.handleOpenDetail(x)} eventList={this.state.eventList} />
         </div>
         <div className="right-content">
-          <Detail key={this.state.curEventId} eventId={this.state.curEventId} onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} />
+          <Detail
+            key={this.state.curEventId}
+            eventId={this.state.curEventId}
+            onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} 
+            onEdit={(x) => this.handleEdit(x)}  
+          />
         </div>
         <div className="addEvent">
           <button className="addEvent-btn" onClick={() => this.hanleAddEvent()}>Add</button>
