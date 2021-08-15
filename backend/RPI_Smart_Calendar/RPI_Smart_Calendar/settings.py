@@ -21,12 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-l0#02ccg8^^t2hd(o-q588u=7=853f5xv5*j6f($=c7p^6j^rw'
-
+STATIC_ROOT = "/django-static/"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 PRODUCTION = False 
-if os.getenv('PRODUCTION', "False").lower() in ["true", "1", "y", "yes"]:
+if os.getenv('PRODUCTION', 'False').lower() in ['true', '1', 'y', 'yes']:
     PRODUCTION = True
+    debugSetting = os.getenv('DEBUG', None)
+    if (debugSetting is not None):
+        if (debugSetting.lower() == 'true'):
+            DEBUG = True
+        elif (debugSetting.lower() == 'false'):
+            DEBUG = False
 
 ALLOWED_HOSTS = [
     '*' if PRODUCTION else '127.0.0.1',

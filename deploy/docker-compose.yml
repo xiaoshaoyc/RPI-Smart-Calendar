@@ -14,6 +14,8 @@ services:
     restart: always
     depends_on:
       - app
+    environment:
+      - SERVER_NAME
 
   app:
     build:
@@ -23,6 +25,7 @@ services:
       - "20001"
     environment:
       - PRODUCTION=true
+      - DEBUG
       - SECRET_KEY
       - SUPERUSER_NAME
       - SUPERUSER_EMAIL
