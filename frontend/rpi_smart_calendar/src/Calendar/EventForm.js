@@ -83,12 +83,25 @@ class EventFrom extends React.Component {
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value });
-    if (this.state.startTime_p1 !== this.state.endTime_p1) {
-      this.setState({errorMessage: "StartTime and endTime must in the same date!"});
-    } else {
+    if (this.state.eType === "block") {
+      if (event.target.id === "startTime_p1") {
+        if (event.target.value !== this.state.startTime_p1) {
+          this.setState({errorMessage: "StartTime and endTime must in the same date!"});
+        } else {
+          this.setState({errorMessage: ""});
+        }
+      } else if (event.target.id === "endTime_p1") {
+        if (event.target.value !== this.state.startTime_p1) {
+          this.setState({errorMessage: "StartTime and endTime must in the same date!"});
+        } else {
+          this.setState({errorMessage: ""});
+        }
+      }
+    }
+    if (event.target.id === "eType") {
       this.setState({errorMessage: ""});
     }
-  }
+  } 
 
   handleSubmit(e) {
     e.preventDefault();
@@ -245,7 +258,7 @@ class EventFrom extends React.Component {
         <form className="eventForm-form" id="eventForm">
           <label for="eType"><b>Type:</b></label>
           <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
-            <option value="line">deadline</option>
+            <option value="line">line</option>
             <option value="block">event</option>
           </select>
           <br />
