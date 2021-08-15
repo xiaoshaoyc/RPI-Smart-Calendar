@@ -184,9 +184,8 @@ class AddEvent(View):
         endTime = request.POST["endTime"]
         type = request.POST["type"]
         groupid = request.POST["groupid"]
-        # actualTime = request.POST["actualTime"]
-        actualTime = 0
         try:
+            actualTime = request.POST["actualTime"]
             actualTime = int(actualTime)
         except:
             actualTime = 0

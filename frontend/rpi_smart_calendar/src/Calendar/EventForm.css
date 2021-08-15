@@ -1,3 +1,7 @@
 .eventForm-container {
-  max-width: 200px;
+  max-width: 500px;
+}
+
+.eventForm__err-msg {
+  color: red;
 }

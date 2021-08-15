@@ -1,6 +1,7 @@
 import React from 'react';
 import Config from '../Config';
-import {parseDate} from '../Util'
+import {parseDate} from '../Util';
+import './EventForm.css';
 
 class EventFrom extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class EventFrom extends React.Component {
       actualTime: 0,
       eventData: null,
       canEdit: true,
+      errorMessage: "",
     };
     if (props.isEdit) {
       this.getDetails();
@@ -81,6 +83,11 @@ class EventFrom extends React.Component {
 
   handleChange(event) {
     this.setState({ [event.target.id]: event.target.value });
+    if (this.state.startTime_p1 !== this.state.endTime_p1) {
+      this.setState({errorMessage: "StartTime and endTime must in the same date!"});
+    } else {
+      this.setState({errorMessage: ""});
+    }
   }
 
   handleSubmit(e) {
@@ -113,12 +120,14 @@ class EventFrom extends React.Component {
 
     let startTime = `${this.state.startTime_p1}T${this.state.startTime_p2}:00.000Z`;
     formData.append("startTime", startTime);
+
     if (isBlock) {
       let endTime = `${this.state.endTime_p1}T${this.state.endTime_p2}:00.000Z`
       formData.append("endTime", endTime);
     } else {
       formData.append("endTime", startTime);
     }
+
     if (!formData.has("title")) {
       formData.set("title", formData.get("groupid"));
     }
@@ -128,6 +137,8 @@ class EventFrom extends React.Component {
     if (!formData.has("groupid")) {
       formData.set("groupid", " ");
     }
+
+    formData.set("actualTime", this.state.actualTime*60);
 
     let xhr = new XMLHttpRequest();
     xhr.open("POST", `http://${Config.BACKEND_URL}/calendar/event/add`);
@@ -189,15 +200,20 @@ class EventFrom extends React.Component {
         <br />
       </div>
     );
+    let errorHTML = this.state.errorMessage === "" ? null : (
+      <div className="eventForm__err-msg">
+        {this.state.errorMessage}
+      </div>
+    );
     let timeRangeHTML = !isBlock ? null : (
       <div>
         <label for="eStartTime">Start time:</label>
-        <input type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
-        <input type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
+        <input type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} max={this.state.endTime_p1} onChange={(x) => this.handleChange(x)} />
+        <input type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} max={this.state.endTime_p2} onChange={(x) => this.handleChange(x)} />
         <br />
         <label for="eEndTime">End time:</label>
-        <input type="date" id="endTime_p1" name="endTime_p1" value={this.state.endTime_p1} onChange={(x) => this.handleChange(x)} />
-        <input type="time" id="endTime_p2" name="endTime_p2" value={this.state.endTime_p2} onChange={(x) => this.handleChange(x)} />
+        <input type="date" id="endTime_p1" name="endTime_p1" value={this.state.endTime_p1} min={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
+        <input type="time" id="endTime_p2" name="endTime_p2" value={this.state.endTime_p2} min={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
         <br />
       </div>
     );
@@ -219,11 +235,13 @@ class EventFrom extends React.Component {
       <div>
         <label for="actualTime">ActualTime</label>
         <input type="text" id="actualTime" name="actualTime" value={this.state.actualTime} onChange={(x) => this.handleChange(x)} />
+        <label>mins</label>
         <br />
       </div>
     );
     return (
       <div className="eventForm-container" onSubmit={(x) => this.handleSubmit(x)}>
+        {errorHTML}
         <form className="eventForm-form" id="eventForm">
           <label for="eType"><b>Type:</b></label>
           <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
