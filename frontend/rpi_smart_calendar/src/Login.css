@@ -6,3 +6,7 @@
   right: 0;
   background-color: aliceblue;
 }
+
+label.login-form__label {
+  color: black;
+}

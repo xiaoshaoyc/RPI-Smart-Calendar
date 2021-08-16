@@ -59,10 +59,10 @@ class Login extends React.Component {
     return (
       <div className="login-container" onSubmit={this.handleSubmit}>
         <form className="login-form" id="loginForm">
-          <label for="lUsername">username: </label>
+          <label for="lUsername" className="login-form__label">username: </label>
           <input type="text" id="lUsername" name="username" value={this.state.username} onChange={this.handleChange} /> 
           <br />
-          <label for="lPassword">password: </label>
+          <label for="lPassword" className="login-form__label">password: </label>
           <input type="password" id="lPassword" name="password" value={this.state.password} onChange={this.handleChange} /> 
           <br />
           <input type="submit" value="submit" />
