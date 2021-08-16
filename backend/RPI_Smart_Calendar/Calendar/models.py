@@ -82,7 +82,7 @@ class Event(models.Model):
         myx.append(self.user.id)
         myx.append(endTime)
         myx.append(groupid)
-        return clf.predict([myx])[0]
+        return max(0,clf.predict([myx])[0])
     # calculate estimate time needed to return
     # return endTime - startTime if type == block
     # return actualTime if actualTime is set if type == line
