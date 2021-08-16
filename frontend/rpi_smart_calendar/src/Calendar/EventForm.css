@@ -1,7 +1,16 @@
 .eventForm-container {
   max-width: 500px;
+  margin:20px;
 }
 
 .eventForm__err-msg {
   color: red;
+}
+.buttons-in-form{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+.buttons-in-form button{
+	margin:10px;
 }

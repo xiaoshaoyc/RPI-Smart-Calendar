@@ -1,34 +1,49 @@
-.container {
+.container-in-calendar {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: calc(100% - 20px);
-  margin-top: 20px;
+  height: 99.5%;
+  /*border:solid;*/
 }
-
-.left-content {
-  width: 15%;
-  display: flex;
+.right-container{
+  width:25%;
+  height:100%;
+  /*border:solid;*/
+}
+.right_container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.analysis {
+  width: 100%;
+  height:50%;
+  /*position:block;*/
+/*  border:solid;*/
+/*  display: flex;
   flex-direction: column-reverse;
-  justify-content: space-between;
+  justify-content: space-between;*/
+  /*height:50%;*/
 }
 
 .main-content {
-  width: 60%;
-  overflow-y: scroll;
-  /* scrollbar-width: none; */
+  width: 75%;
+  overflow-y: auto;
+  border: 1px solid #999999;
+   /*scrollbar-width: none; */
   /* -ms-overflow-style: none; */
+}
+.main-content::-webkit-scrollbar {
+    display: none;
 }
 
 .right-content {
-  width: 25%;
-  height: 100%
-}
-
-.addEvent {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
+  width: 100%;
+  height: 50%;
+/*  display: flex;
+  flex-direction: column;
+  justify-content: space-between;*/
+  /*border:solid;*/
 }
 
 .eventForm {
@@ -37,5 +52,26 @@
   margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
   left: 0;
   right: 0;
-  background-color: aliceblue;
+  border: solid #e6e6e6;
+  border-width:0.5px;
+  border-radius: 4px;
+  background-color: white;
 }
+
+.float-button{
+  position:fixed;
+  width:50px;
+  height:50px;
+  bottom:40px;
+  right: calc( 25% + 40px);
+  background-color:#d6001c;
+  color:#FFFFFF;
+  border-radius:50px;
+  text-align:center;
+  border:none;
+  box-shadow: 2px 2px 3px #999;
+}
+
+.main-content button:hover{
+    background-color:#b30018;
+  }

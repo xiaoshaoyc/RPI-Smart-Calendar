@@ -1,8 +1,10 @@
 .cal-grid__navi {
   display: flex;
   justify-content: space-around;
-  background-color: gainsboro;
-  margin: 0 30px 10px 30px;
+  background-color: #cc001b;
+  color:white;
+  /*margin: 0 30px 10px 30px;*/
+  margin-top:1px;
 }
 
 .cal-grid__date {
@@ -19,6 +21,34 @@
   display: flex;
 }
 
-.cal-grid__btn {
-  
+.cal-grid__btn img {
+  height:30px;
+  padding:0px;
+  margin:0px;
+
+}
+.cal-grid__btn{
+	padding:0px;
+	margin:0px;
+	color:white;
+	background-color: #cc001b;
+	border:none;
+}
+
+.cal-grid__btn-left{
+	left:0;
+}
+.cal-grid__btn-right{
+	right:0;
+}
+.nav button{
+  height:80px;
+  color:white;
+  background-color: #d6001c;
+  border:none;
+}
+
+.cal-grid__btn :hover {
+  background-color: #b30018;
+  color: white;
 }
