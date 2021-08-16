@@ -29,7 +29,7 @@ function formatMinute(second) {
     returnStr += ` ${minutes} ${minuteUnit}`;
   }
   if (seconds !== 0) {
-    returnStr +=  `${seconds} ${secondUnit}`;
+    returnStr +=  ` ${seconds} ${secondUnit}`;
   }
 
   if (returnStr === "") {
