@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Calendar from './Calendar/Calendar';
 // import Group from './Group/Group';
-import Nav from './Nav';
+import MyNav from './Nav';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <div className="page">
-      <Nav />
-      <div className="container home-container">
+      <MyNav />
+      <div className="container-in-index">
         <Calendar />
       </div>
     </div>

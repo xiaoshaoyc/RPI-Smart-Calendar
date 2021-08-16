@@ -83,8 +83,8 @@ class Grid extends React.Component {
       this.setState({curDate: this.props.curDate});
     }
 
-    let c1 = "#91918c";
-    let c2 = "#d6d6c3";
+    let c1 = "#FFFFFF";
+    let c2 = "#f2f2f2";
 
     let eventHTML = [];
     for (let event of this.state.eventList) {

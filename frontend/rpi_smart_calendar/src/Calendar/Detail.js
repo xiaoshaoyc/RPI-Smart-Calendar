@@ -14,7 +14,7 @@ var DAY_TO_WEEK = [
 ];
 
 function formatMinute(second) {
-  let seconds = Math.floor(second % 60);
+  let seconds = second % 60;
   let minutes = Math.floor(second / 60) % 60;
   let hours = Math.floor(second / (60*60));
   let hourUnit = hours === 1 ? "hour" : "hours";

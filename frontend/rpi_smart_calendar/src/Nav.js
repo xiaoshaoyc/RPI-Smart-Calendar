@@ -3,7 +3,8 @@ import './Nav.css';
 import Config from './Config';
 import Login from './Login';
 import {getCookie, eraseCookie} from './Util';
-
+import {Navbar, Container, NavDropdown} from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 class Nav extends React.Component {
   constructor(props) {
     super(props);
@@ -85,7 +86,7 @@ class Nav extends React.Component {
   }
 
   handleGroup() {
-    window.location.replace("/groupPage/chat.html");
+    window.location.replace("/group/");
   }
 
   render() {
@@ -102,14 +103,15 @@ class Nav extends React.Component {
 
     return (
       <div className="nav">
-        <button className="nav-item nav-item1" onClick={() => this.handleGroup()}>Group Chat</button>
         <span className="nav-item nav-item2"><b>RPI Smart Calendar</b></span>
+        
         <img className="nav-item nav-item3" src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg" alt="user-img" />
         <span className="nav-item nav-item4">{this.state.username}</span>
         <div>
           <button className="nav-item nav-item5" onClick={() => this.handleLoginOut()} disabled={this.state.disableLogin}>{loginMessage}</button>
           <button className="nav-item nav-item6" onClick={() => this.handleReg()} >Register</button>
         </div>
+        <button className="nav-item nav-item1" onClick={() => this.handleGroup()}>Group Chat</button>
         {HTML}
       </div>
     )

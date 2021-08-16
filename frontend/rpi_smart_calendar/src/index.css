@@ -27,7 +27,7 @@ code {
   height: 100%;
 }
 
-.home-container.container{
+.container-in-index{
   margin-top: 80px;
   width: 100%;
   height: calc(100% - 80px);

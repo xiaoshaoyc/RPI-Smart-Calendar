@@ -2,6 +2,7 @@ import React from 'react';
 import Config from '../Config';
 import {parseDate} from '../Util';
 import './EventForm.css';
+import {Form, Button, Col, Row} from 'react-bootstrap';
 
 class EventFrom extends React.Component {
   constructor(props) {
@@ -207,73 +208,95 @@ class EventFrom extends React.Component {
   render() {
     let isBlock = this.state.eType === "block" ? true : false;
     let titleHTML = !isBlock ? null : (
-      <div>
-        <label for="eTitle">Title:</label>
-        <input type="text" id="eTitle" name="title" value={this.state.eTitle} onChange={(x) => this.handleChange(x)} />
-        <br />
-      </div>
+      <Form.Group as={Row} className="mb-2">
+        <Form.Label column sm="2" for="eTitle">Title </Form.Label>
+        <Col sm="10">
+        <Form.Control type="text" id="eTitle" name="title" value={this.state.eTitle} onChange={(x) => this.handleChange(x)} />
+        </Col>
+      </Form.Group>
     );
     let errorHTML = this.state.errorMessage === "" ? null : (
-      <div className="eventForm__err-msg">
+      <Form.Group className="eventForm__err-msg">
         {this.state.errorMessage}
-      </div>
+      </Form.Group>
     );
     let timeRangeHTML = !isBlock ? null : (
-      <div>
-        <label for="eStartTime">Start time:</label>
-        <input type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} max={this.state.endTime_p1} onChange={(x) => this.handleChange(x)} />
-        <input type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} max={this.state.endTime_p2} onChange={(x) => this.handleChange(x)} />
-        <br />
-        <label for="eEndTime">End time:</label>
-        <input type="date" id="endTime_p1" name="endTime_p1" value={this.state.endTime_p1} min={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
-        <input type="time" id="endTime_p2" name="endTime_p2" value={this.state.endTime_p2} min={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
-        <br />
-      </div>
+      <Form.Group as={Row} className="mb-2">
+        <Form.Label column sm="2" for="eStartTime">Start</Form.Label>
+          <Col sm="5">
+           <Form.Control type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} max={this.state.endTime_p1} onChange={(x) => this.handleChange(x)} />
+          </Col>
+          <Col sm="5">
+            <Form.Control type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} max={this.state.endTime_p2} onChange={(x) => this.handleChange(x)} />
+          </Col>
+
+        <Form.Label column sm="2" for="eEndTime">End </Form.Label>
+        <Col sm="5">
+          <Form.Control type="date" id="endTime_p1" name="endTime_p1" value={this.state.endTime_p1} min={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
+        </Col>
+        <Col sm="5">
+          <Form.Control type="time" id="endTime_p2" name="endTime_p2" value={this.state.endTime_p2} min={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
+        </Col>
+      </Form.Group>
     );
     let timePointHTML = isBlock ? null : (
-      <div>
-        <label for="eStartTime">Due time:</label>
-        <input type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
-        <input type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
-      </div>
+      <Form.Group as={Row} className="mb-2">
+        <Form.Label column sm="2" for="eStartTime">Due time </Form.Label>
+        <Col sm="5">
+          <Form.Control type="date" id="startTime_p1" name="startTime_p1" value={this.state.startTime_p1} onChange={(x) => this.handleChange(x)} />
+        </Col>
+        <Col sm="5">
+          <Form.Control type="time" id="startTime_p2" name="startTime_p2" value={this.state.startTime_p2} onChange={(x) => this.handleChange(x)} />
+        </Col>
+      </Form.Group>
     );
     let groupHTML = isBlock ? null : (
-      <div>
-        <label for="eGroup">Group:</label>
-        <input type="text" id="eGroup" name="groupid" value={this.state.eGroup} onChange={(x) => this.handleChange(x)} />
-        <br />
-      </div>
+      <Form.Group as={Row} className="mb-3">
+        <Form.Label column sm="2" for="eGroup">Group</Form.Label>
+        <Col sm="10">
+          <Form.Control placeholder="e.g. CSCI4440" type="text" id="eGroup" name="groupid" value={this.state.eGroup} onChange={(x) => this.handleChange(x)} />
+        </Col>
+      </Form.Group>
     );
     let actualTimeHTML = isBlock || (!this.props.isEdit) ? null : (
-      <div>
-        <label for="actualTime">ActualTime</label>
-        <input type="text" id="actualTime" name="actualTime" value={this.state.actualTime} onChange={(x) => this.handleChange(x)} />
-        <label>mins</label>
-        <br />
-      </div>
+      <Form.Group as={Row} className="mb-2">
+        <Form.Label column sm="2" for="actualTime">ActualTime</Form.Label>
+        <Col sm="10">
+        <Form.Control type="text" placeholder="enter time in minute" id="actualTime" name="actualTime" value={this.state.actualTime} onChange={(x) => this.handleChange(x)} />
+        </Col>
+      
+      </Form.Group>
     );
     return (
       <div className="eventForm-container" onSubmit={(x) => this.handleSubmit(x)}>
         {errorHTML}
-        <form className="eventForm-form" id="eventForm">
-          <label for="eType"><b>Type:</b></label>
-          <select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
+        <Form className="eventForm-form" id="eventForm">
+        <Form.Group as={Row} className="mb-2">
+          <Form.Label column sm="2" for="eType">Type</Form.Label>
+          <Col sm="10">
+          <Form.Select id="eType" name="type" value={this.state.eType} onChange={(x) => this.handleChange(x)}>
             <option value="line">line</option>
             <option value="block">event</option>
-          </select>
-          <br />
-          <br />
+          </Form.Select>
+          </Col>
+        </Form.Group>
           {titleHTML}
           {timeRangeHTML}
           {timePointHTML}
-          <label for="eDetails">Details:</label>
-          <textarea id="eDetails" name="details" value={this.state.eDetails} onChange={(x) => this.handleChange(x)} />
-          <br />
+          <Form.Group as={Row} className="mb-2">
+            <Form.Label column sm='2' for="eDetails">Details </Form.Label>
+            <Col sm="10">
+              <Form.Control as="textarea" id="eDetails" name="details" value={this.state.eDetails} onChange={(x) => this.handleChange(x)} />
+            </Col>
+          </Form.Group>
           {groupHTML}
           {actualTimeHTML}
-          <input type="submit" value={this.props.isEdit ? "Update" : "Submit"} />
-          <button onClick={this.props.closeFn}>Cancel</button>
-        </form>
+          <div className="buttons-in-form">
+          <Button type="submit"> {this.props.isEdit ? "Update" : "Submit"} </Button>
+          <Button variant="secondary" onClick={this.props.closeFn}>Cancel</Button>
+          </div>
+
+        </Form>
       </div>
     );
   }

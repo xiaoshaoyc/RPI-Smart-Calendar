@@ -7,6 +7,8 @@ import Detail from './Detail';
 import Grid from './Grid';
 import GridHead from './GridHead';
 import EventFrom from './EventForm';
+// import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Calendar extends React.Component {
   constructor(props) {
@@ -97,26 +99,31 @@ class Calendar extends React.Component {
     let formHTML = this.state.eventFormHTML;
 
     return (
-      <div className="container">
-        <div className="left-content">
-          {/* <Filter labelList={this.state.labelList} onFilterBtn={(label) => this.handleFilterBtn(label)} /> */}
-          <Statistic />
-        </div>
+      <div className="container-in-calendar">
+
         <div className="main-content">
           <GridHead date={this.state.date} onPrevWeek={() => this.handlePrevWeek()} onNextWeek={() => this.handleNextWeek()} />
           <Grid curDate={this.state.date} handleOpenDetail={(x) => this.handleOpenDetail(x)} eventList={this.state.eventList} />
+          <button class="float-button" onClick={() => this.hanleAddEvent()}>+</button>
         </div>
-        <div className="right-content">
-          <Detail
-            key={this.state.curEventId}
-            eventId={this.state.curEventId}
-            onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} 
-            onEdit={(x) => this.handleEdit(x)}  
-          />
+
+        <div class="right-container">
+          <div className="right-content">
+            <Detail
+              key={this.state.curEventId}
+              eventId={this.state.curEventId}
+              onOpenDetail={() => this.handleOpenDetail(this.state.curEventId)} 
+              onEdit={(x) => this.handleEdit(x)}  
+            />
+            
+          </div>
+          <div className="analysis">
+            {/* <Filter labelList={this.state.labelList} onFilterBtn={(label) => this.handleFilterBtn(label)} /> */}
+            <Statistic />
+          </div>
         </div>
-        <div className="addEvent">
-          <button className="addEvent-btn" onClick={() => this.hanleAddEvent()}>Add</button>
-        </div>
+        
+        
         {formHTML}
       </div>
     );

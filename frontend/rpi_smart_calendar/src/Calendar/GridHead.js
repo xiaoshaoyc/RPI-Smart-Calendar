@@ -17,10 +17,10 @@ class GridHead extends React.Component {
     return (
       <div className="cal-grid__head">
         <div className="cal-grid__navi">
-          <button className="cal-grid__btn" onClick={this.props.onPrevWeek}>Left</button>
+          <button className="cal-grid__btn cal-grid__btn-left" onClick={this.props.onPrevWeek}><img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/angle-left-1024.png" /></button>
           <span>{formater.format(weekHead)} - {formater.format(weekEnd)}</span>
           <span>week {getWeek(weekHead)}</span>
-          <button className="cal-grid__btn" onClick={this.props.onNextWeek}>Right</button>
+          <button className="cal-grid__btn cal-grid__btn-right" onClick={this.props.onNextWeek}><img src="https://cdn2.iconfinder.com/data/icons/font-awesome/1792/angle-right-1024.png" /></button>
         </div>
         <div className="cal-grid__date-warp">
           <div className="cal-grid__date-item--empty"> </div>
