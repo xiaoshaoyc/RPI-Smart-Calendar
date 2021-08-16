@@ -173,10 +173,10 @@ class Statistic extends React.PureComponent {
 
       for (let courses of data) {
         for (let courseName in courses) {
-          lastWeekCourseCost[courseName] = courses[courseName].last_time / 60;
-          thisWeekCourseCost[courseName] = courses[courseName].this_time / 60;
-          nextWeekCourseCost[courseName] = courses[courseName].next_time / 60;
-          avgCourseCost[courseName] = courses[courseName].avg_time / 60;
+          lastWeekCourseCost[courseName] = Math.floor(courses[courseName].last_time / 60);
+          thisWeekCourseCost[courseName] = Math.floor(courses[courseName].this_time / 60);
+          nextWeekCourseCost[courseName] = Math.floor(courses[courseName].next_time / 60);
+          avgCourseCost[courseName] = Math.floor(courses[courseName].avg_time / 60);
         }
       }
 
