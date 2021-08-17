@@ -26,14 +26,14 @@ docker-compose up --build -d
 ### Access http://165.227.77.57/
 
 ### Option1: Test our product
-  username: test
-  password: 123456
+  * username: test
+  * password: 123456
   
 ### Option2: Register as a new user
-  register a user
-  send us your userid, courseid, and coursename by
-  logging into feedback account and typing in study group “ADD GROUP”
-  username: feedback
-  password: 123456
+  * register a user
+  * send us your userid, courseid, and coursename by
+  * logging into feedback account and typing in study group “ADD GROUP”
+  * username: feedback
+  * password: 123456
 
 
