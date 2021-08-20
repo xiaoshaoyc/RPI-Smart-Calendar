@@ -23,7 +23,7 @@ docker-compose up --build -d
 
 ## Try Our Product Online
 
-### Access http://165.227.77.57/
+### Access http://
 
 ### Option1: Test our product
   * username: test
